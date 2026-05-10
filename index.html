@@ -7,9 +7,11 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="ambient-grid"></div>
   <header class="site-header">
-    <a class="brand" href="#overview">Hydra Observatory</a>
+    <div class="masthead">
+      <a class="brand" href="#overview">Hydra Observatory</a>
+      <p class="strap">Public procedural observatory · data-journalism preview</p>
+    </div>
     <nav class="nav">
       <a href="#timeline">Timeline</a>
       <a href="#issues">Issues</a>
@@ -22,54 +24,60 @@
   <main>
     <section id="overview" class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Public procedural observatory · preview</p>
-        <h1>Mapping a proceeding through sources, issues and uncertainty.</h1>
-        <p class="lede">Hydra is a source-attributed public reconstruction of selected procedural developments. It visualises hearings, issue streams, sources and caveats without exposing internal raw notes.</p>
-        <div class="hero-actions">
-          <a href="#issues" class="button primary">Explore issue streams</a>
-          <a href="#sources" class="button secondary">View source credits</a>
-        </div>
+        <p class="eyebrow">Public procedural observatory</p>
+        <h1>Tracking a proceeding through uncertainty, evidence and time.</h1>
+        <p class="lede">This page is built as a newsroom-style reconstruction layer: every card is source-attributed, every status is explicit, and caveats are always visible.</p>
+        <div id="timeline-density" class="timeline-density"></div>
       </div>
+
       <aside class="hero-panel">
-        <p class="panel-label">Current public layer</p>
+        <p class="panel-label">Coverage snapshot</p>
         <div class="metric-grid" id="metrics-grid"></div>
         <div class="caveat-box compact">
-          <strong>Reading rule.</strong> Claims, evidence, decisions and analysis remain separate. Verification status is part of the interface.
+          <strong>Reading rule.</strong> Claims, evidence, and conclusions are separated. Verification status is part of the story.
         </div>
       </aside>
     </section>
 
     <section id="timeline" class="section timeline-section">
       <div class="section-heading wide">
-        <p class="eyebrow">Chronology</p>
-        <h2>Procedural timeline</h2>
-        <p>Events are shown as public, caveated timeline entries derived from curated exports.</p>
+        <div>
+          <p class="eyebrow">Chronology</p>
+          <h2>Procedural timeline</h2>
+        </div>
+        <p>Events are rendered from public exports and sorted chronologically to make shifts in verification visible over time.</p>
       </div>
       <div id="timeline-list" class="timeline-rail"></div>
     </section>
 
     <section id="issues" class="section issue-section">
       <div class="section-heading wide">
-        <p class="eyebrow">Issue streams</p>
-        <h2>Procedural issue map</h2>
-        <p>Issue streams are the core navigation layer: they connect hearings, sources, uncertainty and procedural evolution.</p>
+        <div>
+          <p class="eyebrow">Issue streams</p>
+          <h2>Issue map</h2>
+        </div>
+        <p>Issues connect hearings, timeline developments and source caveats.</p>
       </div>
       <div id="issues-grid" class="issue-map"></div>
     </section>
 
     <section id="hearings" class="section hearing-section">
       <div class="section-heading wide">
-        <p class="eyebrow">Hearings</p>
-        <h2>Hearing cards</h2>
+        <div>
+          <p class="eyebrow">Hearings</p>
+          <h2>Hearing cards</h2>
+        </div>
       </div>
       <div id="hearings-grid" class="hearing-grid"></div>
     </section>
 
     <section id="sources" class="section source-section">
       <div class="section-heading wide">
-        <p class="eyebrow">Credits</p>
-        <h2>Source atlas</h2>
-        <p>Sources are credited explicitly and classified by their procedural value and use limitations.</p>
+        <div>
+          <p class="eyebrow">Credits</p>
+          <h2>Source atlas</h2>
+        </div>
+        <p>Each source includes value and usage limitations for transparent interpretation.</p>
       </div>
       <div id="sources-list" class="source-atlas"></div>
     </section>
@@ -77,23 +85,11 @@
     <section id="methodology" class="section methodology">
       <div class="method-banner">
         <p class="eyebrow">Methodology</p>
-        <h2>Uncertainty is not hidden. It is modelled.</h2>
+        <h2>Uncertainty is modeled, not hidden.</h2>
         <div class="method-grid">
-          <article>
-            <span>01</span>
-            <h3>Claim ≠ verified fact</h3>
-            <p>Media reports and public sources are treated as attributed claims unless a stronger verification layer is available.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Raw notes stay internal</h3>
-            <p>The public layer is generated from curated exports. Internal candidate reconstructions are not exposed by default.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Caveats are visible</h3>
-            <p>Verification status, source basis and public caveats are displayed next to public reconstructions.</p>
-          </article>
+          <article><span>01</span><h3>Claim ≠ verified fact</h3><p>Public claims remain attributed claims unless a stronger verification layer exists.</p></article>
+          <article><span>02</span><h3>Public layer only</h3><p>Internal candidate reconstructions are excluded by default.</p></article>
+          <article><span>03</span><h3>Caveats are explicit</h3><p>Verification status and source basis are visible next to each reconstruction.</p></article>
         </div>
       </div>
     </section>
