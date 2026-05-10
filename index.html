@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hydra Observatory — public preview</title>
+  <title>Hydra Observatory — anteprima pubblica</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,88 +11,88 @@
   <header class="site-header">
     <a class="brand" href="#overview">Hydra Observatory</a>
     <nav class="nav">
-      <a href="#timeline">Timeline</a>
-      <a href="#issues">Issues</a>
-      <a href="#hearings">Hearings</a>
-      <a href="#sources">Sources</a>
-      <a href="#methodology">Method</a>
+      <a href="#timeline">Cronologia</a>
+      <a href="#issues">Questioni</a>
+      <a href="#hearings">Udienze</a>
+      <a href="#sources">Fonti</a>
+      <a href="#methodology">Metodo</a>
     </nav>
   </header>
 
   <main>
-    <section id="overview" class="hero">
+    <section id="overview" class="hero atlas-hero">
       <div class="hero-copy">
-        <p class="eyebrow">Public procedural observatory · preview</p>
-        <h1>Mapping a proceeding through sources, issues and uncertainty.</h1>
-        <p class="lede">Hydra is a source-attributed public reconstruction of selected procedural developments. It visualises hearings, issue streams, sources and caveats without exposing internal raw notes.</p>
+        <p class="eyebrow">Osservatorio procedurale pubblico · anteprima</p>
+        <h1>Mappare un processo attraverso fonti, questioni e incertezza.</h1>
+        <p class="lede">Hydra è una restituzione pubblica, attribuita alle fonti e accompagnata da caveat, di alcuni sviluppi procedurali del processo. Visualizza udienze, flussi di questioni, fonti e stati di verifica senza esporre appunti interni grezzi.</p>
         <div class="hero-actions">
-          <a href="#issues" class="button primary">Explore issue streams</a>
-          <a href="#sources" class="button secondary">View source credits</a>
+          <a href="#issues" class="button primary">Esplora le questioni</a>
+          <a href="#sources" class="button secondary">Vedi le fonti</a>
         </div>
       </div>
-      <aside class="hero-panel">
-        <p class="panel-label">Current public layer</p>
+      <aside class="hero-panel observatory-panel">
+        <p class="panel-label">Layer pubblico attuale</p>
         <div class="metric-grid" id="metrics-grid"></div>
         <div class="caveat-box compact">
-          <strong>Reading rule.</strong> Claims, evidence, decisions and analysis remain separate. Verification status is part of the interface.
+          <strong>Regola di lettura.</strong> Claim, evidenze, decisioni e analisi restano separati. Lo stato di verifica è parte dell’interfaccia.
         </div>
       </aside>
     </section>
 
-    <section id="timeline" class="section timeline-section">
+    <section id="timeline" class="section timeline-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Chronology</p>
-        <h2>Procedural timeline</h2>
-        <p>Events are shown as public, caveated timeline entries derived from curated exports.</p>
+        <p class="eyebrow">Cronologia</p>
+        <h2>Linea procedurale</h2>
+        <p>Gli eventi sono restituiti come voci pubbliche, attribuite alle fonti e accompagnate da caveat.</p>
       </div>
       <div id="timeline-list" class="timeline-rail"></div>
     </section>
 
-    <section id="issues" class="section issue-section">
+    <section id="issues" class="section issue-section horizontal-block dominant-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Issue streams</p>
-        <h2>Procedural issue map</h2>
-        <p>Issue streams are the core navigation layer: they connect hearings, sources, uncertainty and procedural evolution.</p>
+        <p class="eyebrow">Flussi procedurali</p>
+        <h2>Mappa delle questioni</h2>
+        <p>Le questioni sono il livello centrale di navigazione: collegano udienze, fonti, incertezza e sviluppo procedurale.</p>
       </div>
       <div id="issues-grid" class="issue-map"></div>
     </section>
 
-    <section id="hearings" class="section hearing-section">
+    <section id="hearings" class="section hearing-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Hearings</p>
-        <h2>Hearing cards</h2>
+        <p class="eyebrow">Udienze</p>
+        <h2>Schede udienza</h2>
       </div>
       <div id="hearings-grid" class="hearing-grid"></div>
     </section>
 
-    <section id="sources" class="section source-section">
+    <section id="sources" class="section source-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Credits</p>
-        <h2>Source atlas</h2>
-        <p>Sources are credited explicitly and classified by their procedural value and use limitations.</p>
+        <p class="eyebrow">Crediti</p>
+        <h2>Atlante delle fonti</h2>
+        <p>Le fonti sono accreditate in modo esplicito e classificate secondo valore procedurale e limiti d’uso.</p>
       </div>
       <div id="sources-list" class="source-atlas"></div>
     </section>
 
     <section id="methodology" class="section methodology">
       <div class="method-banner">
-        <p class="eyebrow">Methodology</p>
-        <h2>Uncertainty is not hidden. It is modelled.</h2>
+        <p class="eyebrow">Metodo</p>
+        <h2>L’incertezza non viene nascosta. Viene modellata.</h2>
         <div class="method-grid">
           <article>
             <span>01</span>
-            <h3>Claim ≠ verified fact</h3>
-            <p>Media reports and public sources are treated as attributed claims unless a stronger verification layer is available.</p>
+            <h3>Claim ≠ fatto verificato</h3>
+            <p>Fonti giornalistiche e pubbliche sono trattate come claim attribuiti, salvo la presenza di uno strato di verifica più forte.</p>
           </article>
           <article>
             <span>02</span>
-            <h3>Raw notes stay internal</h3>
-            <p>The public layer is generated from curated exports. Internal candidate reconstructions are not exposed by default.</p>
+            <h3>Gli appunti grezzi restano interni</h3>
+            <p>Il livello pubblico è generato da export curati. Le ricostruzioni candidate interne non sono esposte di default.</p>
           </article>
           <article>
             <span>03</span>
-            <h3>Caveats are visible</h3>
-            <p>Verification status, source basis and public caveats are displayed next to public reconstructions.</p>
+            <h3>I caveat sono visibili</h3>
+            <p>Stato di verifica, base fonte e caveat pubblici sono mostrati accanto alle ricostruzioni.</p>
           </article>
         </div>
       </div>
@@ -100,7 +100,7 @@
   </main>
 
   <footer class="footer">
-    <p>Hydra Observatory public preview · source-attributed reconstruction, not an official court record.</p>
+    <p>Hydra Observatory · anteprima pubblica · ricostruzione attribuita alle fonti, non verbale ufficiale del processo.</p>
   </footer>
 
   <script src="app.js"></script>
