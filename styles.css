@@ -86,12 +86,12 @@ h1 { font-size: clamp(2.1rem, 5vw, 4.2rem); line-height: .96; }
 .caveat-box { margin-top: 10px; padding: 10px; border-left: 3px solid var(--warn); background: rgba(255, 180, 84, .14); }
 .section-heading.wide { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; padding: 16px 18px 10px; border-bottom: 1px solid var(--line); }
 .section-heading.wide p:last-child { max-width: 60ch; color: var(--muted); }
-.timeline-rail, .issue-map, .hearing-grid, .source-atlas { padding: 16px 18px 20px; display: grid; gap: 12px; }
+.timeline-rail, .issue-map, .hearing-grid, .source-atlas, .network-grid { padding: 16px 18px 20px; display: grid; gap: 12px; }
 .timeline-rail { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); border-left: 2px solid rgba(88,190,255,.34); margin-left: 8px; }
-.issue-map { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.issue-map, .network-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .hearing-grid, .source-atlas { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 
-.timeline-item, .card, .source-card {
+.timeline-item, .card, .source-card, .network-card {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(8, 16, 32, .7);
@@ -99,8 +99,12 @@ h1 { font-size: clamp(2.1rem, 5vw, 4.2rem); line-height: .96; }
   position: relative;
   transition: .2s ease;
 }
-.timeline-item:hover, .card:hover, .source-card:hover { transform: translateY(-2px); border-color: rgba(88,190,255,.56); }
+.timeline-item:hover, .card:hover, .source-card:hover, .network-card:hover { transform: translateY(-2px); border-color: rgba(88,190,255,.56); }
 .timeline-item::before { content: ""; position: absolute; left: -20px; top: 20px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.network-card { overflow: hidden; }
+.network-card::after { content: ""; position: absolute; inset: auto 12px 12px auto; width: 46px; height: 46px; border-radius: 999px; background: radial-gradient(circle, rgba(88,190,255,.22), transparent 70%); pointer-events: none; }
+.network-card h3 { max-width: 24ch; }
+.network-section .caveat-box { margin: 16px 18px 0; }
 
 .badge { display: inline-flex; padding: 4px 8px; border-radius: 999px; font-size: .7rem; font-weight: 700; text-transform: uppercase; border: 1px solid var(--accent); color: var(--accent); background: rgba(88,190,255,.15); }
 .badge.status-verified { border-color: var(--ok); color: var(--ok); }
