@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-05-10T20:51:19.082Z",
+  "tasks": [
+    {
+      "id": "t1_static_qa",
+      "title": "Stabilizzazione QA statica",
+      "status": "done"
+    },
+    {
+      "id": "t2_build_pipeline",
+      "title": "Build pipeline end-to-end",
+      "status": "done"
+    },
+    {
+      "id": "t3_backlog_reduction",
+      "title": "Riduzione backlog issue",
+      "status": "done"
+    },
+    {
+      "id": "t4_multilayer_explorer",
+      "title": "Completamento explorer multi-layer",
+      "status": "done"
+    }
+  ],
+  "task_completion_pct": 100,
+  "overall_completion_pct": 100,
+  "distance_to_goal_pct": 0,
+  "why_distance": []
+}

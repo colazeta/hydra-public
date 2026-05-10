@@ -1,0 +1,6 @@
+{
+  "routes": [
+    { "name": "static_dashboard", "path": "/index.html", "entry": "index.html" },
+    { "name": "prototype_stub", "path": "/prototype/index.html", "entry": "prototype/index.html" }
+  ]
+}
