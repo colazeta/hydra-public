@@ -125,3 +125,24 @@ h1 { font-size: clamp(2.1rem, 5vw, 4.2rem); line-height: .96; }
   .timeline-rail { border-left: 0; margin-left: 0; }
   .timeline-item::before { display: none; }
 }
+
+.source-chip-row { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 10px; }
+.source-chip { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; border:1px solid rgba(122,190,255,.45); color:#dff1ff; text-decoration:none; font-size:.82rem; background:rgba(122,190,255,.12); transition:background .2s ease, transform .2s ease; }
+.source-chip:hover { background:rgba(122,190,255,.2); transform:translateY(-1px); }
+
+.state-message { border:1px dashed var(--line); border-radius:10px; padding:14px; color:var(--muted); background:rgba(255,255,255,.03); }
+
+.issue-section { position: relative; }
+.issue-section::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 50% 0%, rgba(88,190,255,.14), transparent 55%); }
+#issues-grid .card { border-color: rgba(88,190,255,.35); }
+.timeline-item.is-active, .card.is-active { outline: 2px solid rgba(88,190,255,.65); transform: translateY(-2px); }
+@media (min-width: 1200px) {
+  .issue-map { grid-template-columns: repeat(2, minmax(320px, 1fr)); }
+}
+
+.is-dimmed { opacity: .45; filter: saturate(.7); }
+@media (max-width: 760px) {
+  .timeline-item, .card, .source-card, .network-card { padding: 12px; }
+  .source-chip { font-size: .76rem; }
+}
+.is-match { border-color: rgba(88,190,255,.75); box-shadow: 0 0 0 1px rgba(88,190,255,.35) inset; }
