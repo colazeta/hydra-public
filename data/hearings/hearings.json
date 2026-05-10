@@ -1,0 +1,12 @@
+[
+  {
+    "id": "HYDRA_HEARING_0001",
+    "public_title": "Seconda udienza",
+    "technical_label": "second_hearing",
+    "date": null,
+    "date_status": "to_verify",
+    "quality_status": "partial_review",
+    "public_summary": "Udienza dedicata all’appello, alle costituzioni di parte civile, alle questioni preliminari e all’aggiornamento del calendario.",
+    "method_note": "La ricostruzione deriva da trascrizione grezza non verificata integralmente."
+  }
+]
