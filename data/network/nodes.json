@@ -1,0 +1,47 @@
+[
+  {
+    "id": "P-0003",
+    "type": "person",
+    "type_public": "Persona",
+    "label": "Emanuele Gregorini",
+    "public_label": "Emanuele Gregorini",
+    "quality_status": "to_verify",
+    "notes": "Imputato; eccezioni su nullità e indeterminatezza."
+  },
+  {
+    "id": "P-0004",
+    "type": "person",
+    "type_public": "Persona",
+    "label": "Pietro Mannino",
+    "public_label": "Pietro Mannino",
+    "quality_status": "to_verify",
+    "notes": "Imputato; questione accesso audio e competenza."
+  },
+  {
+    "id": "P-0006",
+    "type": "civil_party",
+    "type_public": "Parte civile",
+    "label": "Comune di Abbiategrasso",
+    "public_label": "Comune di Abbiategrasso",
+    "quality_status": "to_verify",
+    "notes": "Costituzione contestata dalle difese."
+  },
+  {
+    "id": "LI-0001",
+    "type": "legal_issue",
+    "type_public": "Questione processuale",
+    "label": "territorial_jurisdiction",
+    "public_label": "Questione sul tribunale competente",
+    "quality_status": "partial_review",
+    "notes": "Questione Milano/Busto Arsizio."
+  },
+  {
+    "id": "LI-0004",
+    "type": "legal_issue",
+    "type_public": "Questione processuale",
+    "label": "defence_access_to_audio",
+    "public_label": "Accesso agli audio delle intercettazioni",
+    "quality_status": "partial_review",
+    "notes": "Diritto di difesa e file audio."
+  }
+]
