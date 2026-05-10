@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hydra Observatory — public preview</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="#overview">Overview</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#hearings">Hearings</a>
+      <a href="#issues">Issues</a>
+      <a href="#sources">Sources</a>
+      <a href="#methodology">Methodology</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="overview" class="hero">
+      <p class="eyebrow">Public procedural observatory</p>
+      <h1>Hydra Observatory</h1>
+      <p class="lede">A source-attributed, caveated public reconstruction of selected procedural developments in the Hydra proceedings.</p>
+      <div class="caveat-box">
+        <strong>Public-use caveat.</strong> This preview does not expose raw internal notes. It renders only curated public exports and distinguishes claims, sources, verification status and analysis.
+      </div>
+    </section>
+
+    <section id="timeline" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Chronology</p>
+        <h2>Procedural timeline</h2>
+      </div>
+      <div id="timeline-list" class="timeline-list"></div>
+    </section>
+
+    <section id="hearings" class="section surface">
+      <div class="section-heading">
+        <p class="eyebrow">Hearings</p>
+        <h2>Hearing explorer</h2>
+      </div>
+      <div id="hearings-grid" class="card-grid"></div>
+    </section>
+
+    <section id="issues" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Issue streams</p>
+        <h2>Procedural issues tracker</h2>
+      </div>
+      <div id="issues-grid" class="card-grid"></div>
+    </section>
+
+    <section id="sources" class="section surface">
+      <div class="section-heading">
+        <p class="eyebrow">Credits</p>
+        <h2>Sources and use limitations</h2>
+      </div>
+      <div id="sources-list" class="source-list"></div>
+    </section>
+
+    <section id="methodology" class="section methodology">
+      <div class="section-heading">
+        <p class="eyebrow">How to read this preview</p>
+        <h2>Methodological notes</h2>
+      </div>
+      <div class="method-grid">
+        <article>
+          <h3>Claim ≠ verified fact</h3>
+          <p>Media reports, hearing notes and public sources are treated as source-attributed claims unless a stronger verification layer is available.</p>
+        </article>
+        <article>
+          <h3>Raw notes stay internal</h3>
+          <p>The public layer is generated from curated exports. Internal raw notes and candidate reconstructions are not exposed by default.</p>
+        </article>
+        <article>
+          <h3>Caveats are part of the interface</h3>
+          <p>Verification status and public caveats should remain visible next to every public reconstruction.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Hydra Observatory public preview. Source-attributed reconstruction, not an official court record.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
