@@ -1,0 +1,22 @@
+[
+  {
+    "status": "verified",
+    "public_label": "Verificato",
+    "description": "Informazione verificata su fonti o atti controllati manualmente."
+  },
+  {
+    "status": "partial_review",
+    "public_label": "Revisione parziale",
+    "description": "Informazione derivata da trascrizioni o materiali ancora in fase di revisione."
+  },
+  {
+    "status": "to_verify",
+    "public_label": "Da verificare",
+    "description": "Informazione non ancora verificata o soggetta ad ambiguità."
+  },
+  {
+    "status": "contested",
+    "public_label": "Contestato",
+    "description": "Elemento contestato proceduralmente o oggetto di dispute tra le parti."
+  }
+]
