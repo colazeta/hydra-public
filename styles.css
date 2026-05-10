@@ -12,7 +12,6 @@
   --warn: #ffb454;
   --bad: #ff6f86;
 }
-
 * { box-sizing: border-box; }
 body {
   margin: 0;
