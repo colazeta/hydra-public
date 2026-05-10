@@ -1,0 +1,34 @@
+[
+  {
+    "segment_id": "SEG-0001",
+    "hearing_id": "HYDRA_HEARING_0001",
+    "sequence": 1,
+    "public_title": "Appello iniziale",
+    "summary": "Verifica di imputati, difensori, sostituzioni e collegamenti da remoto.",
+    "quality_status": "partial_review"
+  },
+  {
+    "segment_id": "SEG-0002",
+    "hearing_id": "HYDRA_HEARING_0001",
+    "sequence": 2,
+    "public_title": "Costituzioni di parte civile",
+    "summary": "Discussione sulle costituzioni di parte civile e sulle contestazioni delle difese.",
+    "quality_status": "partial_review"
+  },
+  {
+    "segment_id": "SEG-0003",
+    "hearing_id": "HYDRA_HEARING_0001",
+    "sequence": 3,
+    "public_title": "Questioni preliminari",
+    "summary": "Eccezioni su competenza territoriale, nullità, notifiche e diritto di difesa.",
+    "quality_status": "partial_review"
+  },
+  {
+    "segment_id": "SEG-0004",
+    "hearing_id": "HYDRA_HEARING_0001",
+    "sequence": 4,
+    "public_title": "Calendario processuale",
+    "summary": "Rinvio dell’udienza e aggiornamento del calendario.",
+    "quality_status": "partial_review"
+  }
+]
