@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hydra Observatory — public preview</title>
+  <title>Hydra Observatory — anteprima pubblica</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,16 +13,17 @@
       <p class="strap">Public procedural observatory · data-journalism preview</p>
     </div>
     <nav class="nav">
-      <a href="#timeline">Timeline</a>
-      <a href="#issues">Issues</a>
-      <a href="#hearings">Hearings</a>
-      <a href="#sources">Sources</a>
-      <a href="#methodology">Method</a>
+      <a href="#timeline">Cronologia</a>
+      <a href="#issues">Questioni</a>
+      <a href="#hearings">Udienze</a>
+      <a href="#sources">Fonti</a>
+      <a href="#methodology">Metodo</a>
+      <a href="gdpr.html">GDPR</a>
     </nav>
   </header>
 
   <main>
-    <section id="overview" class="hero">
+    <section id="overview" class="hero atlas-hero">
       <div class="hero-copy">
         <p class="eyebrow">Public procedural observatory</p>
         <h1>Tracking a proceeding through uncertainty, evidence and time.</h1>
@@ -39,7 +40,7 @@
       </aside>
     </section>
 
-    <section id="timeline" class="section timeline-section">
+    <section id="timeline" class="section timeline-section horizontal-block">
       <div class="section-heading wide">
         <div>
           <p class="eyebrow">Chronology</p>
@@ -50,7 +51,7 @@
       <div id="timeline-list" class="timeline-rail"></div>
     </section>
 
-    <section id="issues" class="section issue-section">
+    <section id="issues" class="section issue-section horizontal-block dominant-block">
       <div class="section-heading wide">
         <div>
           <p class="eyebrow">Issue streams</p>
@@ -61,7 +62,7 @@
       <div id="issues-grid" class="issue-map"></div>
     </section>
 
-    <section id="hearings" class="section hearing-section">
+    <section id="hearings" class="section hearing-section horizontal-block">
       <div class="section-heading wide">
         <div>
           <p class="eyebrow">Hearings</p>
@@ -71,7 +72,7 @@
       <div id="hearings-grid" class="hearing-grid"></div>
     </section>
 
-    <section id="sources" class="section source-section">
+    <section id="sources" class="section source-section horizontal-block">
       <div class="section-heading wide">
         <div>
           <p class="eyebrow">Credits</p>
@@ -93,10 +94,11 @@
         </div>
       </div>
     </section>
+
   </main>
 
   <footer class="footer">
-    <p>Hydra Observatory public preview · source-attributed reconstruction, not an official court record.</p>
+    <p>Hydra Observatory · anteprima pubblica · ricostruzione attribuita alle fonti, non verbale ufficiale del processo.</p>
   </footer>
 
   <script src="app.js"></script>
