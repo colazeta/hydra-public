@@ -1,0 +1,26 @@
+[
+  {
+    "id": "EDGE-0001",
+    "source": "P-0003",
+    "target": "LI-0005",
+    "edge_type": "raises_issue",
+    "edge_type_public": "Solleva questione",
+    "quality_status": "partial_review"
+  },
+  {
+    "id": "EDGE-0002",
+    "source": "P-0004",
+    "target": "LI-0004",
+    "edge_type": "raises_issue",
+    "edge_type_public": "Solleva questione",
+    "quality_status": "partial_review"
+  },
+  {
+    "id": "EDGE-0003",
+    "source": "P-0006",
+    "target": "LI-0002",
+    "edge_type": "target_of_motion",
+    "edge_type_public": "Oggetto di richiesta",
+    "quality_status": "partial_review"
+  }
+]
