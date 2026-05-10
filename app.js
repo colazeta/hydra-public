@@ -56,6 +56,19 @@ function renderMetrics(summary) {
   ].join('');
 }
 
+
+function renderTimelineDensity(items) {
+  const container = document.getElementById('timeline-density');
+  if (!container) return;
+  const buckets = new Array(12).fill(0);
+  items.forEach(item => {
+    const date = new Date(`${item.date}T00:00:00Z`);
+    if (!Number.isNaN(date.getTime())) buckets[date.getUTCMonth()] += 1;
+  });
+  const max = Math.max(...buckets, 1);
+  const bars = buckets.map(v => `<span class="density-bar" style="height:${Math.max(12, Math.round((v/max)*100))}%" title="${v} events"></span>`).join('');
+  container.innerHTML = `<p class="density-title">Event density by month</p><div class="density-bars">${bars}</div>`;
+}
 function applyStatusFilter(filter = 'all') {
   const cards = document.querySelectorAll('.timeline-item, .card');
   cards.forEach(card => {
@@ -94,7 +107,8 @@ function renderStatusFilters() {
 
 async function renderTimeline(data) {
   const container = document.getElementById('timeline-list');
-  container.innerHTML = data.items.map(item => `
+  const sorted = [...data.items].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  container.innerHTML = sorted.map(item => `
     <article class="timeline-item">
       <p class="eyebrow">${formatDateLabel(item.date)}</p>
       <h3>${item.title}</h3>
@@ -150,6 +164,7 @@ async function init() {
   ]);
 
   await renderTimeline(timeline);
+  renderTimelineDensity(timeline.items);
   await renderHearings(hearings);
   await renderIssues(issues);
   await renderSources(sources);

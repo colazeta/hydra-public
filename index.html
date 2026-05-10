@@ -7,9 +7,11 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="ambient-grid"></div>
   <header class="site-header">
-    <a class="brand" href="#overview">Hydra Observatory</a>
+    <div class="masthead">
+      <a class="brand" href="#overview">Hydra Observatory</a>
+      <p class="strap">Public procedural observatory · data-journalism preview</p>
+    </div>
     <nav class="nav">
       <a href="#timeline">Cronologia</a>
       <a href="#issues">Questioni</a>
@@ -23,78 +25,72 @@
   <main>
     <section id="overview" class="hero atlas-hero">
       <div class="hero-copy">
-        <p class="eyebrow">Osservatorio procedurale pubblico · anteprima</p>
-        <h1>Mappare un processo attraverso fonti, questioni e incertezza.</h1>
-        <p class="lede">Hydra è una restituzione pubblica, attribuita alle fonti e accompagnata da caveat, di alcuni sviluppi procedurali del processo. Visualizza udienze, flussi di questioni, fonti e stati di verifica senza esporre appunti interni grezzi.</p>
-        <div class="hero-actions">
-          <a href="#issues" class="button primary">Esplora le questioni</a>
-          <a href="#sources" class="button secondary">Vedi le fonti</a>
-        </div>
+        <p class="eyebrow">Public procedural observatory</p>
+        <h1>Tracking a proceeding through uncertainty, evidence and time.</h1>
+        <p class="lede">This page is built as a newsroom-style reconstruction layer: every card is source-attributed, every status is explicit, and caveats are always visible.</p>
+        <div id="timeline-density" class="timeline-density"></div>
       </div>
-      <aside class="hero-panel observatory-panel">
-        <p class="panel-label">Layer pubblico attuale</p>
+
+      <aside class="hero-panel">
+        <p class="panel-label">Coverage snapshot</p>
         <div class="metric-grid" id="metrics-grid"></div>
         <div class="caveat-box compact">
-          <strong>Regola di lettura.</strong> Claim, evidenze, decisioni e analisi restano separati. Lo stato di verifica è parte dell’interfaccia.
+          <strong>Reading rule.</strong> Claims, evidence, and conclusions are separated. Verification status is part of the story.
         </div>
       </aside>
     </section>
 
     <section id="timeline" class="section timeline-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Cronologia</p>
-        <h2>Linea procedurale</h2>
-        <p>Gli eventi sono restituiti come voci pubbliche, attribuite alle fonti e accompagnate da caveat.</p>
+        <div>
+          <p class="eyebrow">Chronology</p>
+          <h2>Procedural timeline</h2>
+        </div>
+        <p>Events are rendered from public exports and sorted chronologically to make shifts in verification visible over time.</p>
       </div>
       <div id="timeline-list" class="timeline-rail"></div>
     </section>
 
     <section id="issues" class="section issue-section horizontal-block dominant-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Flussi procedurali</p>
-        <h2>Mappa delle questioni</h2>
-        <p>Le questioni sono il livello centrale di navigazione: collegano udienze, fonti, incertezza e sviluppo procedurale.</p>
+        <div>
+          <p class="eyebrow">Issue streams</p>
+          <h2>Issue map</h2>
+        </div>
+        <p>Issues connect hearings, timeline developments and source caveats.</p>
       </div>
       <div id="issues-grid" class="issue-map"></div>
     </section>
 
     <section id="hearings" class="section hearing-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Udienze</p>
-        <h2>Schede udienza</h2>
+        <div>
+          <p class="eyebrow">Hearings</p>
+          <h2>Hearing cards</h2>
+        </div>
       </div>
       <div id="hearings-grid" class="hearing-grid"></div>
     </section>
 
     <section id="sources" class="section source-section horizontal-block">
       <div class="section-heading wide">
-        <p class="eyebrow">Crediti</p>
-        <h2>Atlante delle fonti</h2>
-        <p>Le fonti sono accreditate in modo esplicito e classificate secondo valore procedurale e limiti d’uso.</p>
+        <div>
+          <p class="eyebrow">Credits</p>
+          <h2>Source atlas</h2>
+        </div>
+        <p>Each source includes value and usage limitations for transparent interpretation.</p>
       </div>
       <div id="sources-list" class="source-atlas"></div>
     </section>
 
     <section id="methodology" class="section methodology">
       <div class="method-banner">
-        <p class="eyebrow">Metodo</p>
-        <h2>L’incertezza non viene nascosta. Viene modellata.</h2>
+        <p class="eyebrow">Methodology</p>
+        <h2>Uncertainty is modeled, not hidden.</h2>
         <div class="method-grid">
-          <article>
-            <span>01</span>
-            <h3>Claim ≠ fatto verificato</h3>
-            <p>Fonti giornalistiche e pubbliche sono trattate come claim attribuiti, salvo la presenza di uno strato di verifica più forte.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Gli appunti grezzi restano interni</h3>
-            <p>Il livello pubblico è generato da export curati. Le ricostruzioni candidate interne non sono esposte di default.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>I caveat sono visibili</h3>
-            <p>Stato di verifica, base fonte e caveat pubblici sono mostrati accanto alle ricostruzioni.</p>
-          </article>
+          <article><span>01</span><h3>Claim ≠ verified fact</h3><p>Public claims remain attributed claims unless a stronger verification layer exists.</p></article>
+          <article><span>02</span><h3>Public layer only</h3><p>Internal candidate reconstructions are excluded by default.</p></article>
+          <article><span>03</span><h3>Caveats are explicit</h3><p>Verification status and source basis are visible next to each reconstruction.</p></article>
         </div>
       </div>
     </section>
