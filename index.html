@@ -3,104 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hydra Observatory — anteprima pubblica</title>
+  <title>Hydra Observatory — preview pubblico</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
+  <div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div>
+  <header class="site-header glass">
     <div class="masthead">
-      <a class="brand" href="#overview">Hydra Observatory</a>
-      <p class="strap">Public procedural observatory · data-journalism preview</p>
+      <a class="brand" href="#overview">HYDRA OBSERVATORY</a>
+      <p class="strap" data-i18n="strap">Osservatorio procedurale pubblico · data journalism</p>
     </div>
-    <nav class="nav">
-      <a href="#timeline">Cronologia</a>
-      <a href="#issues">Questioni</a>
-      <a href="#hearings">Udienze</a>
-      <a href="#sources">Fonti</a>
-      <a href="#methodology">Metodo</a>
-      <a href="gdpr.html">GDPR</a>
+    <nav class="nav glass">
+      <a href="#timeline" data-i18n="nav_timeline">Timeline</a>
+      <a href="#issues" data-i18n="nav_issues">Temi</a>
+      <a href="#hearings" data-i18n="nav_hearings">Udienze</a>
+      <a href="#sources" data-i18n="nav_sources">Fonti</a>
+      <a href="#methodology" data-i18n="nav_method">Metodo</a>
     </nav>
+    <button id="lang-toggle" class="lang-toggle">EN</button>
   </header>
 
   <main>
-    <section id="overview" class="hero atlas-hero">
+    <section id="overview" class="hero glass">
       <div class="hero-copy">
-        <p class="eyebrow">Public procedural observatory</p>
-        <h1>Tracking a proceeding through uncertainty, evidence and time.</h1>
-        <p class="lede">This page is built as a newsroom-style reconstruction layer: every card is source-attributed, every status is explicit, and caveats are always visible.</p>
+        <p class="eyebrow" data-i18n="hero_eyebrow">OSSERVATORIO PROCEDURALE PUBBLICO</p>
+        <h1 data-i18n="hero_title">Tracciare un procedimento tra incertezza, prove e tempo.</h1>
+        <p class="lede" data-i18n="hero_lede">Un'esperienza data-journalism interattiva: stato di verifica esplicito, fonti attribuite, caveat visibili.</p>
         <div id="timeline-density" class="timeline-density"></div>
       </div>
 
       <aside class="hero-panel">
-        <p class="panel-label">Coverage snapshot</p>
+        <p class="panel-label" data-i18n="snapshot">Snapshot copertura</p>
         <div class="metric-grid" id="metrics-grid"></div>
-        <div class="caveat-box compact">
-          <strong>Reading rule.</strong> Claims, evidence, and conclusions are separated. Verification status is part of the story.
-        </div>
+        <div class="caveat-box compact"><strong data-i18n="rule_title">Regola di lettura.</strong> <span data-i18n="rule_copy">Claim, evidenze e conclusioni restano separati. Lo stato di verifica è parte della storia.</span></div>
       </aside>
     </section>
 
-    <section id="timeline" class="section timeline-section horizontal-block">
-      <div class="section-heading wide">
-        <div>
-          <p class="eyebrow">Chronology</p>
-          <h2>Procedural timeline</h2>
-        </div>
-        <p>Events are rendered from public exports and sorted chronologically to make shifts in verification visible over time.</p>
-      </div>
-      <div id="timeline-list" class="timeline-rail"></div>
-    </section>
-
-    <section id="issues" class="section issue-section horizontal-block dominant-block">
-      <div class="section-heading wide">
-        <div>
-          <p class="eyebrow">Issue streams</p>
-          <h2>Issue map</h2>
-        </div>
-        <p>Issues connect hearings, timeline developments and source caveats.</p>
-      </div>
-      <div id="issues-grid" class="issue-map"></div>
-    </section>
-
-    <section id="hearings" class="section hearing-section horizontal-block">
-      <div class="section-heading wide">
-        <div>
-          <p class="eyebrow">Hearings</p>
-          <h2>Hearing cards</h2>
-        </div>
-      </div>
-      <div id="hearings-grid" class="hearing-grid"></div>
-    </section>
-
-    <section id="sources" class="section source-section horizontal-block">
-      <div class="section-heading wide">
-        <div>
-          <p class="eyebrow">Credits</p>
-          <h2>Source atlas</h2>
-        </div>
-        <p>Each source includes value and usage limitations for transparent interpretation.</p>
-      </div>
-      <div id="sources-list" class="source-atlas"></div>
-    </section>
-
-    <section id="methodology" class="section methodology">
-      <div class="method-banner">
-        <p class="eyebrow">Methodology</p>
-        <h2>Uncertainty is modeled, not hidden.</h2>
-        <div class="method-grid">
-          <article><span>01</span><h3>Claim ≠ verified fact</h3><p>Public claims remain attributed claims unless a stronger verification layer exists.</p></article>
-          <article><span>02</span><h3>Public layer only</h3><p>Internal candidate reconstructions are excluded by default.</p></article>
-          <article><span>03</span><h3>Caveats are explicit</h3><p>Verification status and source basis are visible next to each reconstruction.</p></article>
-        </div>
-      </div>
-    </section>
-
+    <section id="timeline" class="section timeline-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="chrono">CRONOLOGIA</p><h2 data-i18n="timeline_title">Timeline procedurale</h2></div><p data-i18n="timeline_desc">Eventi ordinati cronologicamente per osservare evoluzione e affidabilità.</p></div><div id="timeline-list" class="timeline-rail"></div></section>
+    <section id="issues" class="section issue-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="issues">TEMI</p><h2 data-i18n="issues_title">Mappa dei temi</h2></div><p data-i18n="issues_desc">I temi connettono udienze, eventi e limiti delle fonti.</p></div><div id="issues-grid" class="issue-map"></div></section>
+    <section id="hearings" class="section hearing-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="hearings">UDIENZE</p><h2 data-i18n="hearings_title">Schede udienza</h2></div></div><div id="hearings-grid" class="hearing-grid"></div></section>
+    <section id="sources" class="section source-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="sources">FONTI</p><h2 data-i18n="sources_title">Atlante fonti</h2></div><p data-i18n="sources_desc">Valore pubblico e limiti d'uso esplicitati fonte per fonte.</p></div><div id="sources-list" class="source-atlas"></div></section>
   </main>
 
-  <footer class="footer">
-    <p>Hydra Observatory · anteprima pubblica · ricostruzione attribuita alle fonti, non verbale ufficiale del processo.</p>
-  </footer>
-
+  <footer class="footer"><p data-i18n="footer">Hydra Observatory preview pubblico · ricostruzione attribuita, non verbale ufficiale.</p></footer>
   <script src="app.js"></script>
 </body>
 </html>

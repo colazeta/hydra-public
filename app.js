@@ -1,200 +1,30 @@
-async function loadJson(path, fallback = null) {
-  const response = await fetch(path);
-  if (!response.ok) throw new Error(`Failed to load ${path}`);
-  return response.json();
-}
+const I18N = {
+  it: { timeline_events:'Eventi timeline', issue_streams:'Temi', hearings_tracked:'Udienze', verified_share:'Quota verificata', density:'Densità eventi per mese', filter:'Filtra per verifica', all:'Tutti', verified:'Verificati', pending:'In attesa', partial:'Parziali', disputed:'Contestati', unverified:'Non verificati', caveat:'Caveat.', issue_clusters:'Cluster temi:', status:'Stato:', use_lim:"Limiti d'uso:", open_source:'Apri fonte', missing_data:'Dati non disponibili in questo export pubblico: ', date_unavailable:'Data non disponibile' },
+  en: { timeline_events:'Timeline events', issue_streams:'Issue streams', hearings_tracked:'Hearings tracked', verified_share:'Verified share', density:'Event density by month', filter:'Filter by verification', all:'All', verified:'Verified', pending:'Pending', partial:'Partial', disputed:'Disputed', unverified:'Unverified', caveat:'Caveat.', issue_clusters:'Issue clusters:', status:'Status:', use_lim:'Use limitation:', open_source:'Open source', missing_data:'Data not available in this public export: ', date_unavailable:'Date unavailable' }
+};
+let LANG = 'it';
+const t = (k) => I18N[LANG][k] || k;
 
-async function safeLoadJson(path, fallback) {
-  try {
-    return await loadJson(path, fallback);
-  } catch (error) {
-    console.warn(`[hydra] ${error.message}. Using fallback.`);
-    return fallback;
-  }
-}
+async function loadJson(path) { const response = await fetch(path); if (!response.ok) throw new Error(`Failed to load ${path}`); return response.json(); }
+async function safeLoadJson(path, fallback) { try { return await loadJson(path); } catch { return fallback; } }
+const slugifyStatus = (text='') => String(text).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const createBadge = (text) => `<span class="badge status-${slugifyStatus(text)}">${text}</span>`;
+function formatDateLabel(rawDate){ if(!rawDate) return t('date_unavailable'); const d=new Date(`${rawDate}T00:00:00Z`); return Number.isNaN(d.getTime())?rawDate:new Intl.DateTimeFormat(LANG,{month:'short',day:'2-digit',year:'numeric',timeZone:'UTC'}).format(d); }
+const metricCard = (label,value,percent=0)=>`<article class="metric-card"><p class="metric-label">${label}</p><p class="metric-value">${value}</p><div class="metric-bar" style="--metric-width:${percent}%"></div></article>`;
+const computeStatusShare=(c,k='verification_status')=>!c.length?0:Math.round((c.filter(i=>slugifyStatus(i[k])==='verified').length/c.length)*100);
 
-function slugifyStatus(text = "") {
-  return String(text).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
+function renderMetrics(s){ document.getElementById('metrics-grid').innerHTML=[metricCard(t('timeline_events'),s.timelineCount,100),metricCard(t('issue_streams'),s.issueCount,100),metricCard(t('hearings_tracked'),s.hearingCount,100),metricCard(t('verified_share'),`${s.verifiedShare}%`,s.verifiedShare)].join(''); }
+function renderTimelineDensity(items){ const c=document.getElementById('timeline-density'); const b=new Array(12).fill(0); items.forEach(i=>{const d=new Date(`${i.date}T00:00:00Z`); if(!Number.isNaN(d.getTime())) b[d.getUTCMonth()]++;}); const m=Math.max(...b,1); c.innerHTML=`<p class="density-title">${t('density')}</p><div class="density-bars">${b.map(v=>`<span class="density-bar" style="height:${Math.max(12,Math.round((v/m)*100))}%"></span>`).join('')}</div>`; }
+function applyStatusFilter(filter='all'){ document.querySelectorAll('.timeline-item, .card').forEach(card=>{const badge=card.querySelector('.badge'); if(!badge) return; card.style.display=(filter==='all'||badge.classList.contains(`status-${filter}`))?'':'none';}); document.querySelectorAll('.filter-chip').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===filter)); }
+function renderStatusFilters(){ const p=document.querySelector('.hero-panel'); const w=document.createElement('div'); w.className='status-filters'; w.innerHTML=`<p class="panel-label">${t('filter')}</p><div class="filter-row"><button class="filter-chip active" data-filter="all">${t('all')}</button><button class="filter-chip" data-filter="verified">${t('verified')}</button><button class="filter-chip" data-filter="pending-verification">${t('pending')}</button><button class="filter-chip" data-filter="partially-verified">${t('partial')}</button><button class="filter-chip" data-filter="disputed">${t('disputed')}</button><button class="filter-chip" data-filter="unverified">${t('unverified')}</button></div>`; p.querySelector('.status-filters')?.remove(); p.appendChild(w); w.querySelectorAll('.filter-chip').forEach(b=>b.onclick=()=>applyStatusFilter(b.dataset.filter)); }
+function applyStaticTranslations(){ document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n; if(I18N[LANG][k]) el.textContent=I18N[LANG][k];}); }
 
-function createBadge(text) {
-  const statusClass = slugifyStatus(text);
-  return `<span class="badge status-${statusClass}">${text}</span>`;
-}
+async function renderTimeline(data){ const sorted=[...data.items].sort((a,b)=>String(a.date).localeCompare(String(b.date))); document.getElementById('timeline-list').innerHTML=sorted.map(i=>`<article class="timeline-item"><p class="eyebrow">${formatDateLabel(i.date)}</p><h3>${i.title}</h3><p>${i.summary}</p>${createBadge(i.verification_status)}<p><strong>${t('caveat')}</strong> ${i.public_caveat}</p></article>`).join(''); }
+async function renderHearings(data){ document.getElementById('hearings-grid').innerHTML=data.hearings.map(i=>`<article class="card"><p class="eyebrow">${formatDateLabel(i.date)}</p><h3>${i.public_title}</h3><p>${i.summary}</p><p><strong>${t('issue_clusters')}</strong> ${i.issue_clusters.join(', ')}</p>${createBadge(i.verification_status)}<p><strong>${t('caveat')}</strong> ${i.public_caveat}</p></article>`).join(''); }
+async function renderIssues(data){ document.getElementById('issues-grid').innerHTML=data.issues.map(i=>`<article class="card"><h3>${i.public_label}</h3><p>${i.summary}</p><p><strong>${t('status')}</strong> ${i.current_status}</p>${createBadge(i.verification_status)}<p><strong>${t('caveat')}</strong> ${i.public_caveat}</p></article>`).join(''); }
+async function renderSources(data){ document.getElementById('sources-list').innerHTML=data.sources.map(i=>`<article class="source-card"><h3>${i.outlet}</h3><p><strong>${i.title}</strong></p><p>${i.public_value}</p><p><strong>${t('use_lim')}</strong> ${i.use_limitations}</p><p><a href="${i.url}" target="_blank" rel="noopener noreferrer">${t('open_source')}</a></p></article>`).join(''); }
 
-function formatDateLabel(rawDate) {
-  if (!rawDate) return "Date unavailable";
-  const parsed = new Date(`${rawDate}T00:00:00Z`);
-  if (Number.isNaN(parsed.getTime())) return rawDate;
-  return new Intl.DateTimeFormat('en', {
-    month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC'
-  }).format(parsed);
-}
+async function init(){ applyStaticTranslations(); const [timeline,hearings,issues,sources]=await Promise.all([safeLoadJson('data/exports/public/public_timeline.json',{items:[]}),safeLoadJson('data/exports/public/public_hearings.json',{hearings:[]}),safeLoadJson('data/exports/public/public_issues.json',{issues:[]}),safeLoadJson('data/exports/public/public_sources.json',{sources:[]})]); await renderTimeline(timeline); renderTimelineDensity(timeline.items); await renderHearings(hearings); await renderIssues(issues); await renderSources(sources); const miss=[]; if(!hearings.hearings.length) miss.push('hearings'); if(!issues.issues.length) miss.push('issues'); if(!sources.sources.length) miss.push('sources'); if(miss.length){const c=document.querySelector('.caveat-box'); if(c) c.innerHTML+=` <em>${t('missing_data')}${miss.join(', ')}.</em>`;} const verifiedShare=computeStatusShare([...timeline.items,...hearings.hearings,...issues.issues]); renderMetrics({timelineCount:timeline.items.length,issueCount:issues.issues.length,hearingCount:hearings.hearings.length,verifiedShare}); renderStatusFilters(); applyStatusFilter('all'); }
 
-function metricCard(label, value, percent = 0) {
-  return `
-    <article class="metric-card">
-      <p class="metric-label">${label}</p>
-      <p class="metric-value">${value}</p>
-      <div class="metric-bar" style="--metric-width:${percent}%"></div>
-    </article>`;
-}
-
-function computeStatusShare(collection, key = 'verification_status') {
-  if (!collection.length) return 0;
-  const verifiedCount = collection.filter(item => slugifyStatus(item[key]) === 'verified').length;
-  return Math.round((verifiedCount / collection.length) * 100);
-}
-
-function renderMetrics(summary) {
-  const container = document.getElementById('metrics-grid');
-  container.innerHTML = [
-    metricCard('Timeline events', summary.timelineCount, 100),
-    metricCard('Issue streams', summary.issueCount, 100),
-    metricCard('Hearings tracked', summary.hearingCount, 100),
-    metricCard('Verified share', `${summary.verifiedShare}%`, summary.verifiedShare)
-  ].join('');
-}
-
-
-function renderTimelineDensity(items) {
-  const container = document.getElementById('timeline-density');
-  if (!container) return;
-  const buckets = new Array(12).fill(0);
-  items.forEach(item => {
-    const date = new Date(`${item.date}T00:00:00Z`);
-    if (!Number.isNaN(date.getTime())) buckets[date.getUTCMonth()] += 1;
-  });
-  const max = Math.max(...buckets, 1);
-  const bars = buckets.map(v => `<span class="density-bar" style="height:${Math.max(12, Math.round((v/max)*100))}%" title="${v} events"></span>`).join('');
-  container.innerHTML = `<p class="density-title">Event density by month</p><div class="density-bars">${bars}</div>`;
-}
-function applyStatusFilter(filter = 'all') {
-  const cards = document.querySelectorAll('.timeline-item, .card');
-  cards.forEach(card => {
-    const badge = card.querySelector('.badge');
-    if (!badge) return;
-    const matches = filter === 'all' || badge.classList.contains(`status-${filter}`);
-    card.style.display = matches ? '' : 'none';
-  });
-
-  document.querySelectorAll('.filter-chip').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.filter === filter);
-  });
-}
-
-function renderStatusFilters() {
-  const panel = document.querySelector('.hero-panel');
-  if (!panel) return;
-  const wrapper = document.createElement('div');
-  wrapper.className = 'status-filters';
-  wrapper.innerHTML = `
-    <p class="panel-label">Filter by verification</p>
-    <div class="filter-row">
-      <button class="filter-chip active" data-filter="all">All</button>
-      <button class="filter-chip" data-filter="verified">Verified</button>
-      <button class="filter-chip" data-filter="pending-verification">Pending</button>
-      <button class="filter-chip" data-filter="partially-verified">Partial</button>
-      <button class="filter-chip" data-filter="disputed">Disputed</button>
-      <button class="filter-chip" data-filter="unverified">Unverified</button>
-    </div>`;
-  panel.appendChild(wrapper);
-
-  wrapper.querySelectorAll('.filter-chip').forEach(button => {
-    button.addEventListener('click', () => applyStatusFilter(button.dataset.filter));
-  });
-}
-
-async function renderTimeline(data) {
-  const container = document.getElementById('timeline-list');
-  const sorted = [...data.items].sort((a, b) => String(a.date).localeCompare(String(b.date)));
-  container.innerHTML = sorted.map(item => `
-    <article class="timeline-item">
-      <p class="eyebrow">${formatDateLabel(item.date)}</p>
-      <h3>${item.title}</h3>
-      <p>${item.summary}</p>
-      ${createBadge(item.verification_status)}
-      <p><strong>Caveat.</strong> ${item.public_caveat}</p>
-    </article>`).join('');
-}
-
-async function renderHearings(data) {
-  const container = document.getElementById('hearings-grid');
-  container.innerHTML = data.hearings.map(item => `
-    <article class="card">
-      <p class="eyebrow">${formatDateLabel(item.date)}</p>
-      <h3>${item.public_title}</h3>
-      <p>${item.summary}</p>
-      <p><strong>Issue clusters:</strong> ${item.issue_clusters.join(', ')}</p>
-      ${createBadge(item.verification_status)}
-      <p><strong>Caveat.</strong> ${item.public_caveat}</p>
-    </article>`).join('');
-}
-
-async function renderIssues(data) {
-  const container = document.getElementById('issues-grid');
-  container.innerHTML = data.issues.map(item => `
-    <article class="card">
-      <h3>${item.public_label}</h3>
-      <p>${item.summary}</p>
-      <p><strong>Status:</strong> ${item.current_status}</p>
-      ${createBadge(item.verification_status)}
-      <p><strong>Caveat.</strong> ${item.public_caveat}</p>
-    </article>`).join('');
-}
-
-async function renderSources(data) {
-  const container = document.getElementById('sources-list');
-  container.innerHTML = data.sources.map(item => `
-    <article class="source-card">
-      <h3>${item.outlet}</h3>
-      <p><strong>${item.title}</strong></p>
-      <p>${item.public_value}</p>
-      <p><strong>Use limitation:</strong> ${item.use_limitations}</p>
-      <p><a href="${item.url}" target="_blank" rel="noopener noreferrer">Open source</a></p>
-    </article>`).join('');
-}
-
-async function init() {
-  const [timeline, hearings, issues, sources] = await Promise.all([
-    safeLoadJson('data/exports/public/public_timeline.json', { items: [] }),
-    safeLoadJson('data/exports/public/public_hearings.json', { hearings: [] }),
-    safeLoadJson('data/exports/public/public_issues.json', { issues: [] }),
-    safeLoadJson('data/exports/public/public_sources.json', { sources: [] })
-  ]);
-
-  await renderTimeline(timeline);
-  renderTimelineDensity(timeline.items);
-  await renderHearings(hearings);
-  await renderIssues(issues);
-  await renderSources(sources);
-
-  const missingDatasets = [];
-  if (!hearings.hearings.length) missingDatasets.push('hearings');
-  if (!issues.issues.length) missingDatasets.push('issues');
-  if (!sources.sources.length) missingDatasets.push('sources');
-  if (missingDatasets.length) {
-    const caveat = document.querySelector('.caveat-box');
-    if (caveat) {
-      caveat.innerHTML += ` <em>Data not available in this public export: ${missingDatasets.join(', ')}.</em>`;
-    }
-  }
-
-  const verifiedShare = computeStatusShare([
-    ...timeline.items,
-    ...hearings.hearings,
-    ...issues.issues
-  ]);
-
-  renderMetrics({
-    timelineCount: timeline.items.length,
-    issueCount: issues.issues.length,
-    hearingCount: hearings.hearings.length,
-    verifiedShare
-  });
-
-  renderStatusFilters();
-  applyStatusFilter('all');
-}
-
+document.getElementById('lang-toggle')?.addEventListener('click',()=>{ LANG=LANG==='it'?'en':'it'; document.getElementById('lang-toggle').textContent=LANG==='it'?'EN':'IT'; init(); });
 init();
