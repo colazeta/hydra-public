@@ -36,6 +36,15 @@
     "notes": "Questione Milano/Busto Arsizio."
   },
   {
+    "id": "LI-0002",
+    "type": "legal_issue",
+    "type_public": "Questione processuale",
+    "label": "civil_party_timeliness",
+    "public_label": "Tempestività delle parti civili",
+    "quality_status": "partial_review",
+    "notes": "Questione relativa alla tempestività o ammissibilità di alcune costituzioni di parte civile."
+  },
+  {
     "id": "LI-0004",
     "type": "legal_issue",
     "type_public": "Questione processuale",
@@ -43,5 +52,14 @@
     "public_label": "Accesso agli audio delle intercettazioni",
     "quality_status": "partial_review",
     "notes": "Diritto di difesa e file audio."
+  },
+  {
+    "id": "LI-0005",
+    "type": "legal_issue",
+    "type_public": "Questione processuale",
+    "label": "charge_indeterminacy",
+    "public_label": "Chiarezza delle accuse",
+    "quality_status": "partial_review",
+    "notes": "Questione sull’asserita genericità o indeterminatezza di alcune contestazioni."
   }
 ]
