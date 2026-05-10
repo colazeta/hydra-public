@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-05-10T20:51:09.404Z",
+  "overall_completion_pct": 100,
+  "distance_to_goal_pct": 0,
+  "issue_completion_pct": 100,
+  "build_readiness": "READY_STATIC",
+  "build_blocker_reason": "static runtime is deployable; bundler optional for this release scope",
+  "actions": [
+    {
+      "priority": "P1",
+      "task": "Ridurre backlog issue aperte con milestone incrementali",
+      "done_when": "remaining issues = 0 e issue_completion_pct = 100"
+    },
+    {
+      "priority": "P2",
+      "task": "Incrementare copertura explorer multi-layer (network+timeline+evidence)",
+      "done_when": "roadmap_phase_progress_pct >= 90"
+    }
+  ]
+}

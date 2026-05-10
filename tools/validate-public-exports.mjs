@@ -8,6 +8,13 @@ const checks = [
   ['network', 'data/exports/public/public_network.json', 'nodes']
 ];
 
+
+const validateNetworkShape = (data) => {
+  const nodesOk = (data.nodes || []).every((n) => n.id && n.type && n.public_label);
+  const edgesOk = (data.edges || []).every((e) => e.id && e.source && e.target && e.public_label);
+  return nodesOk && edgesOk;
+};
+
 let failed = false;
 for (const [name, path, key] of checks) {
   if (!fs.existsSync(path)) {
@@ -22,6 +29,7 @@ for (const [name, path, key] of checks) {
       failed = true;
       continue;
     }
+    if(name==='network' && !validateNetworkShape(data)){ console.error('INVALID network: required node/edge fields missing'); failed=true; continue; }
     console.log(`OK ${name}: ${key}=${data[key].length}`);
   } catch (err) {
     console.error(`PARSE_ERROR ${name}: ${err.message}`);
