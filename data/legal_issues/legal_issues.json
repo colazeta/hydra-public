@@ -1,0 +1,26 @@
+[
+  {
+    "id": "LI-0001",
+    "slug": "territorial-jurisdiction",
+    "public_label": "Competenza territoriale",
+    "technical_label": "territorial_jurisdiction",
+    "summary": "Diverse difese sostengono che il procedimento dovrebbe essere trattato dal Tribunale di Busto Arsizio anziché da Milano.",
+    "quality_status": "partial_review"
+  },
+  {
+    "id": "LI-0004",
+    "slug": "access-to-interception-audio",
+    "public_label": "Accesso agli audio delle intercettazioni",
+    "technical_label": "defence_access_to_audio",
+    "summary": "Eccezioni sul diritto degli imputati detenuti ad accedere ai file audio delle intercettazioni.",
+    "quality_status": "partial_review"
+  },
+  {
+    "id": "LI-0005",
+    "slug": "charge-indeterminacy",
+    "public_label": "Indeterminatezza delle accuse",
+    "technical_label": "charge_indeterminacy",
+    "summary": "La difesa Gregorini sostiene che alcune contestazioni associative siano formulate in modo generico o indeterminato.",
+    "quality_status": "partial_review"
+  }
+]
