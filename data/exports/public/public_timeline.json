@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "id": "PT-2026-001",
+      "date": "2026-03-19",
+      "title": "First ordinary-trial hearing",
+      "summary": "Public reporting converges on the opening of the ordinary-trial branch involving approximately 45 defendants, with collaborator-related procedural developments also emerging during the hearing phase.",
+      "phase": "ordinary_trial",
+      "linked_hearing_ids": ["H-20260319-001"],
+      "linked_issue_ids": ["PI-0010", "PI-0012"],
+      "source_ids": ["MEDIA-2026-002", "MEDIA-2026-003"],
+      "verification_status": "partially_verified",
+      "public_caveat": "Based on media-source convergence; formal hearing record not yet integrated."
+    },
+    {
+      "id": "PT-2026-002",
+      "date": "2026-04-30",
+      "title": "Preliminary procedural issues hearing",
+      "summary": "The hearing focused on preliminary procedural issues, including civil-party participation, territorial-competence objections and defence-rights questions.",
+      "phase": "preliminary_issues",
+      "linked_hearing_ids": ["H-20260430-001"],
+      "linked_issue_ids": ["PI-0001", "PI-0005", "PI-0004"],
+      "source_ids": ["MEDIA-2026-001", "MEDIA-2026-005"],
+      "verification_status": "partially_verified",
+      "public_caveat": "Public synthesis derived from source-attributed reconstruction and hearing-archive support."
+    }
+  ]
+}
