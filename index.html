@@ -3,67 +3,111 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hydra Observatory — preview pubblico</title>
+  <title>Hydra Public — atlante processuale</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
-  <div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div>
-  <header class="site-header glass">
-    <div class="masthead">
-      <a class="brand" href="#overview">HYDRA OBSERVATORY</a>
-      <p class="strap" data-i18n="strap">Osservatorio procedurale pubblico · data journalism</p>
-    </div>
-    <nav class="nav glass">
-      <a href="#timeline" data-i18n="nav_timeline">Timeline</a>
-      <a href="#issues" data-i18n="nav_issues">Temi</a>
-      <a href="#network">Network</a>
-      <a href="#evidence">Evidenze</a>
-      <a href="#hearings" data-i18n="nav_hearings">Udienze</a>
-      <a href="#sources" data-i18n="nav_sources">Fonti</a>
-      <a href="#methodology" data-i18n="nav_method">Metodo</a>
+  <aside class="app-sidebar">
+    <a class="brand-mark" href="#overview"><span>H</span><strong>HYDRA</strong><small>process intelligence</small></a>
+    <nav class="side-nav" aria-label="Navigazione principale">
+      <p>Navigazione</p>
+      <a href="#overview" class="active">Panoramica</a>
+      <a href="#themes-panel">Temi</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#network">Soggetti e relazioni</a>
+      <a href="#evidence">Documenti</a>
+      <a href="#hearings">Udienze</a>
+      <a href="#sources">Fonti</a>
+      <a href="#methodology">Metodo</a>
     </nav>
-    <button id="lang-toggle" class="lang-toggle">EN</button>
-  </header>
+    <nav class="side-nav guided" aria-label="Percorsi guidati">
+      <p>Percorsi guidati</p>
+      <a href="#themes-panel">Linee accusatorie</a>
+      <a href="#timeline">Evoluzione cautelare</a>
+      <a href="#network">Soggetti chiave</a>
+      <a href="#evidence">Prova documentale</a>
+      <a href="#themes-panel">Rapporti e relazioni</a>
+    </nav>
+    <div class="support-card">
+      <strong>Guida di lettura</strong>
+      <p>Ogni sezione esplicita cosa mostra e cosa non può dimostrare.</p>
+      <a href="#methodology">Apri metodo</a>
+    </div>
+  </aside>
 
-  <main>
-    <section id="overview" class="hero glass">
-      <div class="hero-copy">
-        <p class="eyebrow" data-i18n="hero_eyebrow">OSSERVATORIO PROCEDURALE PUBBLICO</p>
-        <h1 data-i18n="hero_title">Tracciare un procedimento tra incertezza, prove e tempo.</h1>
-        <p class="lede" data-i18n="hero_lede">Un'esperienza data-journalism interattiva: stato di verifica esplicito, fonti attribuite, caveat visibili.</p>
-        <div class="reading-path">
-          <article><span>1</span><strong>Segui il tempo</strong><p>Parti dalla timeline per capire quando emergono eventi e questioni.</p></article>
-          <article><span>2</span><strong>Apri i temi</strong><p>Leggi le questioni processuali senza confonderle con decisioni definitive.</p></article>
-          <article><span>3</span><strong>Esplora la rete</strong><p>Usa il network come mappa documentale, non come attribuzione di responsabilità.</p></article>
+  <div class="app-shell">
+    <header class="topbar">
+      <label class="search-box"><span>Cerca</span><input type="search" placeholder="Cerca nel processo, documento, soggetto, tema…" /></label>
+      <nav class="top-nav">
+        <a href="#overview">Panoramica</a>
+        <a href="#themes-panel">Temi</a>
+        <a href="#timeline">Procedimento</a>
+        <a href="#network">Analisi</a>
+        <a href="#evidence">Documenti</a>
+      </nav>
+      <button id="lang-toggle" class="lang-toggle">EN</button>
+    </header>
+
+    <main>
+      <section id="overview" class="page-grid">
+        <div class="main-column">
+          <section class="hero-board surface">
+            <div>
+              <p class="eyebrow">Atlante processuale pubblico</p>
+              <h1>Processo Hydra</h1>
+              <p class="lede">Uno spazio per seguire temi, eventi, udienze, fonti e relazioni documentali senza trasformare la ricostruzione pubblica in una conclusione giudiziaria.</p>
+            </div>
+            <div class="hero-actions"><a href="#themes-panel">Esplora i temi</a><a href="#timeline">Segui il tempo</a></div>
+          </section>
+
+          <section class="kpi-strip surface" id="metrics-grid" aria-label="Sintesi del procedimento"></section>
+
+          <section id="timeline" class="section surface timeline-section">
+            <div class="section-heading wide"><div><p class="eyebrow">Evoluzione del processo</p><h2>Linea del tempo</h2></div><p>Mostra quando emergono eventi, atti e udienze. Non misura un “impatto”: rende leggibile la sequenza documentata.</p></div>
+            <div id="timeline-density" class="process-stream"></div>
+            <div id="timeline-list" class="timeline-rail"></div>
+          </section>
+
+          <section class="split-row">
+            <section id="themes-panel" class="section surface theme-section">
+              <div class="section-heading"><div><p class="eyebrow">Temi principali</p><h2>Fenomeni ricorrenti</h2></div><a href="#issues">Vedi tutti</a></div>
+              <div id="themes-strip" class="theme-strip"></div>
+            </section>
+            <section id="issues" class="section surface issue-section">
+              <div class="section-heading"><div><p class="eyebrow">Mappa tematica</p><h2>Temi, caveat e stato</h2></div></div>
+              <div id="issues-grid" class="issue-map"></div>
+            </section>
+          </section>
+
+          <section id="network" class="section surface network-section">
+            <div class="section-heading wide"><div><p class="eyebrow">Mappa dei soggetti e delle relazioni</p><h2>Connessioni processuali e documentali</h2></div><p>Il grafo indica collegamenti emersi nelle fonti pubbliche. Non attribuisce responsabilità penali.</p></div>
+            <div id="network-caveat" class="caveat-box compact"></div>
+            <div class="network-shell"><div id="network-graph"></div><aside id="network-detail-panel" class="network-detail-panel"><p class="eyebrow">Selezione</p><h3>Seleziona un nodo o una relazione</h3><p>Il dettaglio mostrerà tipologia, qualità del dato e note metodologiche.</p></aside></div>
+            <div id="network-grid" class="network-grid"></div>
+          </section>
+
+          <section id="evidence" class="section surface evidence-section">
+            <div class="section-heading wide"><div><p class="eyebrow">Documenti chiave recenti</p><h2>Fonti, evidenze e materiali</h2></div><p>Ogni documento va letto per funzione processuale, fonte e limiti d’uso.</p></div>
+            <div id="evidence-caveat" class="caveat-box compact"></div>
+            <div id="evidence-list" class="document-row"></div>
+          </section>
+
+          <section id="hearings" class="section surface hearing-section"><div class="section-heading wide"><div><p class="eyebrow">Udienze</p><h2>Schede udienza</h2></div></div><div id="hearings-grid" class="hearing-grid"></div></section>
+          <section id="sources" class="section surface source-section"><div class="section-heading wide"><div><p class="eyebrow">Fonti</p><h2>Atlante fonti</h2></div><p>Valore pubblico e limiti d’uso esplicitati fonte per fonte.</p></div><div id="sources-list" class="source-atlas"></div></section>
+          <section id="methodology" class="section surface methodology-section"><div class="section-heading wide"><div><p class="eyebrow">Metodo</p><h2>Come leggere Hydra</h2></div><p>Hydra distingue fatto osservato, richiesta, contestazione, fonte e verifica. L’incertezza resta visibile.</p></div><div class="method-grid"><article><h3>Non è un verbale ufficiale</h3><p>Le ricostruzioni pubbliche derivano da fonti, appunti e trascrizioni in revisione.</p></article><article><h3>Le relazioni non sono colpe</h3><p>Il network mostra relazioni processuali e documentali, non conclusioni giudiziarie.</p></article><article><h3>La qualità è visibile</h3><p>Badge, caveat e filtri indicano se un elemento è verificato, parziale o da verificare.</p></article></div></section>
         </div>
-        <div id="timeline-density" class="timeline-density"></div>
-      </div>
 
-      <aside class="hero-panel">
-        <p class="panel-label" data-i18n="snapshot">Snapshot copertura</p>
-        <div class="metric-grid" id="metrics-grid"></div>
-        <div class="caveat-box compact"><strong data-i18n="rule_title">Regola di lettura.</strong> <span data-i18n="rule_copy">Claim, evidenze e conclusioni restano separati. Lo stato di verifica è parte della storia.</span></div>
-      </aside>
-    </section>
+        <aside class="context-column">
+          <section class="surface context-card"><p class="eyebrow">Contesto attuale</p><h2>N. 1234/20XX R.G.N.R.</h2><p>Tribunale di Roma</p><div class="context-event"><span>Udienza</span><strong>12 Maggio 2023</strong><small>Aula B — ore 10:30</small></div><a href="#timeline">Apri scheda completa →</a></section>
+          <section class="surface continuity-card"><p class="eyebrow">Continuità processuale</p><h3>Sviluppi successivi</h3><p class="hint">Cosa deriva da questo evento</p><ul><li><time>20/05/2023</time> Prossima udienza</li><li><time>24/05/2023</time> Deposito documenti</li></ul><h3>Documenti richiamati</h3><p class="hint">Citati o allegati</p><ul><li>Verbale udienza 05/05/2023</li><li>Ordinanza cautelare 15/05/2023</li><li>Intercettazioni ambientali 2022</li></ul></section>
+          <section class="surface ai-card"><p class="eyebrow">Assistente Hydra AI</p><div class="orb-mini"></div><p>Posso aiutarti ad analizzare il processo, trovare connessioni o rispondere a domande specifiche.</p><input type="text" placeholder="Fai una domanda…" /></section>
+        </aside>
+      </section>
+    </main>
+    <footer class="footer"><p>Hydra Public · ricostruzione attribuita, non verbale ufficiale.</p></footer>
+  </div>
 
-    <section id="timeline" class="section timeline-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="chrono">CRONOLOGIA</p><h2 data-i18n="timeline_title">Timeline procedurale</h2></div><p data-i18n="timeline_desc">Eventi ordinati cronologicamente per osservare evoluzione e affidabilità.</p></div><div id="timeline-list" class="timeline-rail"></div></section>
-    <section id="issues" class="section issue-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="issues">TEMI</p><h2 data-i18n="issues_title">Mappa dei temi</h2></div><p data-i18n="issues_desc">I temi connettono udienze, eventi e limiti delle fonti.</p></div><div id="issues-grid" class="issue-map"></div></section>
-    <section id="network" class="section network-section glass"><div class="section-heading wide"><div><p class="eyebrow">NETWORK</p><h2>Relazioni processuali e documentali</h2></div><p>Il network mostra connessioni tra soggetti, questioni e richieste. Non rappresenta responsabilità penali.</p></div><div id="network-caveat" class="caveat-box compact"></div><div class="network-shell"><div id="network-graph"></div><aside id="network-detail-panel" class="network-detail-panel"><p class="eyebrow">SELEZIONE</p><h3>Seleziona un nodo o una relazione</h3><p>Il dettaglio mostrerà tipologia, qualità del dato e note metodologiche.</p></aside></div><div id="network-grid" class="network-grid"></div></section>
-    <section id="evidence" class="section evidence-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="evidence_panel">EVIDENZE</p><h2 data-i18n="evidence_panel">Evidenze</h2></div><p>Fonti e materiali con valore metodologico, separati da claim e conclusioni.</p></div><div id="evidence-caveat" class="caveat-box compact"></div><div id="evidence-list" class="hearing-grid"></div></section>
-    <section id="hearings" class="section hearing-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="hearings">UDIENZE</p><h2 data-i18n="hearings_title">Schede udienza</h2></div></div><div id="hearings-grid" class="hearing-grid"></div></section>
-    <section id="sources" class="section source-section glass"><div class="section-heading wide"><div><p class="eyebrow" data-i18n="sources">FONTI</p><h2 data-i18n="sources_title">Atlante fonti</h2></div><p data-i18n="sources_desc">Valore pubblico e limiti d'uso esplicitati fonte per fonte.</p></div><div id="sources-list" class="source-atlas"></div></section>
-    <section id="methodology" class="section methodology-section glass">
-      <div class="section-heading wide"><div><p class="eyebrow">METODO</p><h2>Come leggere Hydra</h2></div><p>Hydra distingue tra fatto osservato, richiesta, contestazione, fonte e verifica. La trasparenza sull'incertezza è parte dell'interfaccia.</p></div>
-      <div class="method-grid">
-        <article><h3>Non è un verbale ufficiale</h3><p>Le ricostruzioni pubbliche derivano da fonti, appunti e trascrizioni in revisione. Non sostituiscono atti o decisioni.</p></article>
-        <article><h3>Le relazioni non sono colpe</h3><p>Il network mostra relazioni processuali e documentali: chi solleva questioni, dove emergono temi, quali fonti documentano passaggi.</p></article>
-        <article><h3>La qualità è visibile</h3><p>Badge, caveat e filtri indicano se un elemento è verificato, parziale, contestato o ancora da verificare.</p></article>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer"><p data-i18n="footer">Hydra Observatory preview pubblico · ricostruzione attribuita, non verbale ufficiale.</p></footer>
   <script src="app.js"></script>
   <script src="network-enhancements.js"></script>
   <script src="network-focus-bridge.js"></script>
