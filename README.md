@@ -13,6 +13,7 @@ index.html
 app.js
 styles.css
 network-enhancements.js
+network-focus-bridge.js
 ```
 
 Il materiale React/Vite eventualmente presente sotto `src/` è sperimentale e non costituisce il frontend pubblico canonico.
@@ -49,6 +50,12 @@ La modalità espansa e i controlli di navigazione sono gestiti da:
 network-enhancements.js
 ```
 
+Il focus bridge del network è gestito da:
+
+```text
+network-focus-bridge.js
+```
+
 ## Validazione statica
 
 Prima di ogni modifica rilevante eseguire:
@@ -63,7 +70,8 @@ Lo script verifica:
 - validità degli export JSON;
 - coerenza del network;
 - edge senza nodi mancanti;
-- presenza di caveat e quality status.
+- presenza di caveat e quality status;
+- presenza dei moduli network canonici.
 
 La validazione è anche eseguita da GitHub Actions:
 
@@ -71,9 +79,32 @@ La validazione è anche eseguita da GitHub Actions:
 .github/workflows/validate-static-dashboard.yml
 ```
 
-## QA browser-side
+## Smoke test browser automatico
 
-La validazione statica non sostituisce il controllo reale in browser.
+Il repository include anche uno smoke test browser-side con Playwright:
+
+```text
+scripts/browser_smoke_test.mjs
+.github/workflows/browser-smoke-test.yml
+```
+
+Lo smoke test verifica in modo automatico:
+
+- caricamento della dashboard;
+- assenza di errori console bloccanti;
+- presenza della sezione Network;
+- rendering del canvas `vis-network`;
+- assenza di canvas duplicati;
+- caveat della rete;
+- funzionamento base della modalità espansa;
+- chiusura con `Escape`;
+- fallback card del network.
+
+Lo smoke test non sostituisce il QA manuale, ma intercetta regressioni browser-side gravi.
+
+## QA browser-side manuale
+
+La validazione statica e lo smoke test automatico non sostituiscono il controllo reale in browser.
 
 Protocollo:
 
@@ -87,14 +118,21 @@ Template report:
 docs/browser_qa_report_template.md
 ```
 
+Issue template:
+
+```text
+.github/ISSUE_TEMPLATE/browser_qa_report.md
+```
+
 Flusso consigliato:
 
 ```text
 1. eseguire python scripts/validate_static_dashboard.py
-2. aprire la dashboard pubblica in browser
-3. seguire docs/browser_qa_protocol.md
-4. compilare docs/browser_qa_report_template.md
-5. riportare eventuali fix in issue dedicate
+2. verificare che lo smoke test automatico passi
+3. aprire la dashboard pubblica in browser
+4. seguire docs/browser_qa_protocol.md
+5. compilare docs/browser_qa_report_template.md o aprire una issue QA
+6. riportare eventuali fix in issue dedicate
 ```
 
 Il QA deve verificare:
@@ -143,6 +181,8 @@ La dashboard statica contiene:
 - timeline;
 - temi/questioni processuali;
 - network interattivo;
+- modalità network espansa;
+- focus bridge del network;
 - evidenze;
 - udienze;
 - fonti;
@@ -151,7 +191,8 @@ La dashboard statica contiene:
 Le prossime priorità sono:
 
 1. completare QA browser-side;
-2. rifinire la navigazione della rete;
-3. consolidare il focus mode;
-4. migliorare filtri semantici;
-5. sincronizzare timeline e network.
+2. verificare smoke test e correggere regressioni;
+3. rifinire la navigazione della rete;
+4. consolidare il focus mode;
+5. migliorare filtri semantici;
+6. sincronizzare timeline e network.
