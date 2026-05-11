@@ -54,10 +54,10 @@ REQUIRED_APP_SNIPPETS = [
     "public_network.json",
     "renderInteractiveNetwork",
     "renderNetwork",
-    "container.innerHTML=''",
-    "const brokenEdges=rawEdges.length-edges.length",
     "HYDRA_NETWORK_INSTANCE.destroy",
-    "HYDRA_NETWORK_BRIDGE?.filter",
+    "HYDRA_NETWORK_BRIDGE",
+    "zoomView:false",
+    "springLength:95",
 ]
 
 REQUIRED_ENHANCEMENT_SNIPPETS = [
@@ -69,11 +69,16 @@ REQUIRED_ENHANCEMENT_SNIPPETS = [
 ]
 
 REQUIRED_BRIDGE_SNIPPETS = [
-    "HYDRA_NETWORK_INSTANCE",
+    "HYDRA_NETWORK_BRIDGE",
+    "compatibility shim",
+]
+
+FORBIDDEN_BRIDGE_SNIPPETS = [
     "focusNode",
     "focusEdge",
-    "HYDRA_NETWORK_BRIDGE",
-    "public_network.json",
+    "applyGraphFilter",
+    "nodeData.update",
+    "edgeData.update",
 ]
 
 REQUIRED_CSS_SNIPPETS = [
@@ -82,6 +87,9 @@ REQUIRED_CSS_SNIPPETS = [
     ".network-shell",
     ".network-detail-panel",
     ".network-toolbar",
+    ".source-dossier",
+    ".source-group",
+    ".source-mini",
 ]
 
 FORBIDDEN_CSS_SNIPPETS = [
@@ -220,6 +228,7 @@ def main() -> int:
     check_snippets("app.js", app, REQUIRED_APP_SNIPPETS, errors)
     check_snippets("network-enhancements.js", enhancements, REQUIRED_ENHANCEMENT_SNIPPETS, errors)
     check_snippets("network-focus-bridge.js", bridge, REQUIRED_BRIDGE_SNIPPETS, errors)
+    check_absent("network-focus-bridge.js", bridge, FORBIDDEN_BRIDGE_SNIPPETS, errors)
     check_snippets("styles.css", css, REQUIRED_CSS_SNIPPETS, errors)
     check_absent("styles.css", css, FORBIDDEN_CSS_SNIPPETS, errors)
 
