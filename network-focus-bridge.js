@@ -1,6 +1,7 @@
 (() => {
   let rawNetwork = { nodes: [], edges: [] };
   let installedOn = null;
+  let activeGraphFilter = 'all';
 
   function badge(status = 'pending verification') {
     const slug = String(status).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -33,6 +34,63 @@
     return rawNetwork;
   }
 
+  function visibleNodeIdsForFilter(filter) {
+    if (!filter || filter === 'all' || filter === 'edges') return new Set(rawNetwork.nodes.map((node) => node.id));
+    if (filter.startsWith('type:')) {
+      const type = filter.slice(5);
+      return new Set(rawNetwork.nodes.filter((node) => node.type === type).map((node) => node.id));
+    }
+    if (filter.startsWith('quality:')) {
+      const quality = filter.slice(8);
+      return new Set(rawNetwork.nodes.filter((node) => String(node.quality_status || '').toLowerCase() === quality).map((node) => node.id));
+    }
+    return new Set(rawNetwork.nodes.map((node) => node.id));
+  }
+
+  function applyGraphFilter(network, filter) {
+    const nodeData = network?.body?.data?.nodes;
+    const edgeData = network?.body?.data?.edges;
+    if (!nodeData || !edgeData || !rawNetwork.nodes.length) return;
+
+    activeGraphFilter = filter || 'all';
+    const visibleNodeIds = visibleNodeIdsForFilter(activeGraphFilter);
+
+    nodeData.update(rawNetwork.nodes.map((node) => {
+      const visible = visibleNodeIds.has(node.id);
+      return {
+        id: node.id,
+        hidden: !visible,
+        color: { background: nodeColor(node.type), border: '#eaf2ff' },
+        font: { color: '#eaf2ff' },
+      };
+    }));
+
+    edgeData.update(rawNetwork.edges.map((edge) => {
+      const visible = visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target);
+      return {
+        id: edge.id,
+        hidden: !visible,
+        color: { color: 'rgba(156,177,211,.7)' },
+        width: 1,
+      };
+    }));
+
+    network.unselectAll?.();
+    resetPanel();
+    window.setTimeout(() => network.fit?.({ animation: { duration: 350, easingFunction: 'easeInOutQuad' } }), 60);
+  }
+
+  function attachFilterListeners(network) {
+    document.querySelectorAll('#network .network-filters .filter-chip').forEach((button) => {
+      if (button.dataset.bridgeBound === 'true') return;
+      button.dataset.bridgeBound = 'true';
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter || 'all';
+        window.setTimeout(() => applyGraphFilter(network, filter), 0);
+      });
+    });
+  }
+
   function showPanel(html) {
     const panel = document.getElementById('network-detail-panel');
     if (panel) panel.innerHTML = html;
@@ -51,14 +109,18 @@
     const edgeData = network?.body?.data?.edges;
     if (!nodeData || !edgeData) return;
 
+    const visibleNodeIds = visibleNodeIdsForFilter(activeGraphFilter);
+
     nodeData.update(rawNetwork.nodes.map((node) => ({
       id: node.id,
+      hidden: !visibleNodeIds.has(node.id),
       color: { background: nodeColor(node.type), border: '#eaf2ff' },
       font: { color: '#eaf2ff' },
     })));
 
     edgeData.update(rawNetwork.edges.map((edge) => ({
       id: edge.id,
+      hidden: !(visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)),
       color: { color: 'rgba(156,177,211,.7)' },
       width: 1,
     })));
@@ -75,9 +137,11 @@
     const relatedEdges = rawNetwork.edges.filter((edge) => edge.source === nodeId || edge.target === nodeId);
     const relatedIds = new Set([nodeId, ...relatedEdges.flatMap((edge) => [edge.source, edge.target])]);
     const relatedEdgeIds = new Set(relatedEdges.map((edge) => edge.id));
+    const visibleNodeIds = visibleNodeIdsForFilter(activeGraphFilter);
 
     nodeData.update(rawNetwork.nodes.map((item) => ({
       id: item.id,
+      hidden: !visibleNodeIds.has(item.id),
       color: {
         background: nodeColor(item.type),
         border: relatedIds.has(item.id) ? '#ffffff' : 'rgba(156,177,211,.20)',
@@ -85,11 +149,15 @@
       font: { color: relatedIds.has(item.id) ? '#eaf2ff' : 'rgba(156,177,211,.35)' },
     })));
 
-    edgeData.update(rawNetwork.edges.map((edge) => ({
-      id: edge.id,
-      color: { color: relatedEdgeIds.has(edge.id) ? '#58beff' : 'rgba(156,177,211,.14)' },
-      width: relatedEdgeIds.has(edge.id) ? 2 : 1,
-    })));
+    edgeData.update(rawNetwork.edges.map((edge) => {
+      const visible = visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target);
+      return {
+        id: edge.id,
+        hidden: !visible,
+        color: { color: relatedEdgeIds.has(edge.id) ? '#58beff' : 'rgba(156,177,211,.14)' },
+        width: relatedEdgeIds.has(edge.id) ? 2 : 1,
+      };
+    }));
 
     showPanel(`
       <p class="eyebrow">${node.type}</p>
@@ -128,9 +196,12 @@
 
   async function installBridge() {
     const network = getNetwork();
-    if (!network || installedOn === network) return;
+    if (!network) return;
 
     await loadRawNetwork();
+    attachFilterListeners(network);
+
+    if (installedOn === network) return;
     installedOn = network;
 
     network.on('click', (params) => {
@@ -158,6 +229,7 @@
         network.unselectAll?.();
         network.fit?.({ animation: { duration: 500, easingFunction: 'easeInOutQuad' } });
       },
+      filter: (filter) => applyGraphFilter(network, filter || 'all'),
     };
   }
 
