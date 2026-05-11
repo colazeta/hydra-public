@@ -13,6 +13,7 @@
     <nav class="side-nav" aria-label="Navigazione principale">
       <p>Navigazione</p>
       <a href="#overview" class="active">Panoramica</a>
+      <a href="#process-canvas">Canvas</a>
       <a href="#themes-panel">Temi</a>
       <a href="#timeline">Timeline</a>
       <a href="#network">Soggetti e relazioni</a>
@@ -24,92 +25,46 @@
     <nav class="side-nav guided" aria-label="Percorsi guidati">
       <p>Percorsi guidati</p>
       <a href="#themes-panel">Linee accusatorie</a>
+      <a href="#process-canvas">Canvas processuale</a>
       <a href="#timeline">Evoluzione cautelare</a>
       <a href="#network">Soggetti chiave</a>
       <a href="#evidence">Prova documentale</a>
-      <a href="#themes-panel">Rapporti e relazioni</a>
     </nav>
-    <div class="support-card">
-      <strong>Guida di lettura</strong>
-      <p>Ogni sezione esplicita cosa mostra e cosa non può dimostrare.</p>
-      <a href="#methodology">Apri metodo</a>
-    </div>
+    <div class="support-card"><strong>Guida di lettura</strong><p>Ogni sezione esplicita cosa mostra e cosa non può dimostrare.</p><a href="#methodology">Apri metodo</a></div>
   </aside>
 
   <div class="app-shell">
     <header class="topbar">
       <label class="search-box"><span>Cerca</span><input type="search" placeholder="Cerca nel processo, documento, soggetto, tema…" /></label>
-      <nav class="top-nav">
-        <a href="#overview">Panoramica</a>
-        <a href="#themes-panel">Temi</a>
-        <a href="#timeline">Procedimento</a>
-        <a href="#network">Analisi</a>
-        <a href="#evidence">Documenti</a>
-      </nav>
+      <nav class="top-nav"><a href="#overview">Panoramica</a><a href="#process-canvas">Canvas</a><a href="#themes-panel">Temi</a><a href="#timeline">Procedimento</a><a href="#network">Analisi</a><a href="#evidence">Documenti</a></nav>
       <button id="lang-toggle" class="lang-toggle">EN</button>
     </header>
 
     <main>
       <section id="overview" class="page-grid">
         <div class="main-column">
-          <section class="hero-board surface">
-            <div>
-              <p class="eyebrow">Atlante processuale pubblico</p>
-              <h1>Processo Hydra</h1>
-              <p class="lede">Uno spazio per seguire temi, eventi, udienze, fonti e relazioni documentali senza trasformare la ricostruzione pubblica in una conclusione giudiziaria.</p>
-            </div>
-            <div class="hero-actions"><a href="#themes-panel">Esplora i temi</a><a href="#timeline">Segui il tempo</a></div>
-          </section>
-
+          <section class="hero-board surface"><div><p class="eyebrow">Atlante processuale pubblico</p><h1>Processo Hydra</h1><p class="lede">Uno spazio per seguire temi, eventi, udienze, fonti e relazioni documentali senza trasformare la ricostruzione pubblica in una conclusione giudiziaria.</p></div><div class="hero-actions"><a href="#process-canvas">Apri il canvas</a><a href="#timeline">Segui il tempo</a></div></section>
           <section class="kpi-strip surface" id="metrics-grid" aria-label="Sintesi del procedimento"></section>
 
-          <section id="timeline" class="section surface timeline-section">
-            <div class="section-heading wide"><div><p class="eyebrow">Evoluzione del processo</p><h2>Linea del tempo</h2></div><p>Mostra quando emergono eventi, atti e udienze. Non misura un “impatto”: rende leggibile la sequenza documentata.</p></div>
-            <div id="timeline-density" class="process-stream"></div>
-            <div id="timeline-list" class="timeline-rail"></div>
+          <section id="process-canvas" class="section surface canvas-section">
+            <div class="section-heading wide"><div><p class="eyebrow">Canvas del processo</p><h2>Spazio di orientamento</h2></div><p>Una mappa sintetica per passare da temi, eventi, documenti e soggetti senza perdere il contesto. È una mappa di navigazione, non una prova.</p></div>
+            <div class="canvas-toolbar"><button class="filter-chip active" data-canvas-layer="all">Tutti i livelli</button><button class="filter-chip" data-canvas-layer="theme">Temi</button><button class="filter-chip" data-canvas-layer="event">Eventi</button><button class="filter-chip" data-canvas-layer="document">Documenti</button><button class="filter-chip" data-canvas-layer="actor">Soggetti</button></div>
+            <div class="process-canvas-shell"><div id="process-canvas-map" class="process-canvas-map" aria-label="Canvas processuale"></div><aside id="canvas-focus-panel" class="canvas-focus-panel"><p class="eyebrow">Focus</p><h3>Seleziona un elemento</h3><p>Il pannello mostrerà cosa introduce, richiama o collega, mantenendo separati dati e interpretazione.</p></aside></div>
           </section>
 
-          <section class="split-row">
-            <section id="themes-panel" class="section surface theme-section">
-              <div class="section-heading"><div><p class="eyebrow">Temi principali</p><h2>Fenomeni ricorrenti</h2></div><a href="#issues">Vedi tutti</a></div>
-              <div id="themes-strip" class="theme-strip"></div>
-            </section>
-            <section id="issues" class="section surface issue-section">
-              <div class="section-heading"><div><p class="eyebrow">Mappa tematica</p><h2>Temi, caveat e stato</h2></div></div>
-              <div id="issues-grid" class="issue-map"></div>
-            </section>
-          </section>
-
-          <section id="network" class="section surface network-section">
-            <div class="section-heading wide"><div><p class="eyebrow">Mappa dei soggetti e delle relazioni</p><h2>Connessioni processuali e documentali</h2></div><p>Il grafo indica collegamenti emersi nelle fonti pubbliche. Non attribuisce responsabilità penali.</p></div>
-            <div id="network-caveat" class="caveat-box compact"></div>
-            <div class="network-shell"><div id="network-graph"></div><aside id="network-detail-panel" class="network-detail-panel"><p class="eyebrow">Selezione</p><h3>Seleziona un nodo o una relazione</h3><p>Il dettaglio mostrerà tipologia, qualità del dato e note metodologiche.</p></aside></div>
-            <div id="network-grid" class="network-grid"></div>
-          </section>
-
-          <section id="evidence" class="section surface evidence-section">
-            <div class="section-heading wide"><div><p class="eyebrow">Documenti chiave recenti</p><h2>Fonti, evidenze e materiali</h2></div><p>Ogni documento va letto per funzione processuale, fonte e limiti d’uso.</p></div>
-            <div id="evidence-caveat" class="caveat-box compact"></div>
-            <div id="evidence-list" class="document-row"></div>
-          </section>
-
+          <section id="timeline" class="section surface timeline-section"><div class="section-heading wide"><div><p class="eyebrow">Evoluzione del processo</p><h2>Linea del tempo</h2></div><p>Mostra quando emergono eventi, atti e udienze. Non misura un “impatto”: rende leggibile la sequenza documentata.</p></div><div id="timeline-density" class="process-stream"></div><div id="timeline-list" class="timeline-rail"></div></section>
+          <section class="split-row"><section id="themes-panel" class="section surface theme-section"><div class="section-heading"><div><p class="eyebrow">Temi principali</p><h2>Fenomeni ricorrenti</h2></div><a href="#issues">Vedi tutti</a></div><div id="themes-strip" class="theme-strip"></div></section><section id="issues" class="section surface issue-section"><div class="section-heading"><div><p class="eyebrow">Mappa tematica</p><h2>Temi, caveat e stato</h2></div></div><div id="issues-grid" class="issue-map"></div></section></section>
+          <section id="network" class="section surface network-section"><div class="section-heading wide"><div><p class="eyebrow">Mappa dei soggetti e delle relazioni</p><h2>Connessioni processuali e documentali</h2></div><p>Il grafo indica collegamenti emersi nelle fonti pubbliche. Non attribuisce responsabilità penali.</p></div><div id="network-caveat" class="caveat-box compact"></div><div class="network-shell"><div id="network-graph"></div><aside id="network-detail-panel" class="network-detail-panel"><p class="eyebrow">Selezione</p><h3>Seleziona un nodo o una relazione</h3><p>Il dettaglio mostrerà tipologia, qualità del dato e note metodologiche.</p></aside></div><div id="network-grid" class="network-grid"></div></section>
+          <section id="evidence" class="section surface evidence-section"><div class="section-heading wide"><div><p class="eyebrow">Documenti chiave recenti</p><h2>Fonti, evidenze e materiali</h2></div><p>Ogni documento va letto per funzione processuale, fonte e limiti d’uso.</p></div><div id="evidence-caveat" class="caveat-box compact"></div><div id="evidence-list" class="document-row"></div></section>
           <section id="hearings" class="section surface hearing-section"><div class="section-heading wide"><div><p class="eyebrow">Udienze</p><h2>Schede udienza</h2></div></div><div id="hearings-grid" class="hearing-grid"></div></section>
           <section id="sources" class="section surface source-section"><div class="section-heading wide"><div><p class="eyebrow">Fonti</p><h2>Atlante fonti</h2></div><p>Valore pubblico e limiti d’uso esplicitati fonte per fonte.</p></div><div id="sources-list" class="source-atlas"></div></section>
           <section id="methodology" class="section surface methodology-section"><div class="section-heading wide"><div><p class="eyebrow">Metodo</p><h2>Come leggere Hydra</h2></div><p>Hydra distingue fatto osservato, richiesta, contestazione, fonte e verifica. L’incertezza resta visibile.</p></div><div class="method-grid"><article><h3>Non è un verbale ufficiale</h3><p>Le ricostruzioni pubbliche derivano da fonti, appunti e trascrizioni in revisione.</p></article><article><h3>Le relazioni non sono colpe</h3><p>Il network mostra relazioni processuali e documentali, non conclusioni giudiziarie.</p></article><article><h3>La qualità è visibile</h3><p>Badge, caveat e filtri indicano se un elemento è verificato, parziale o da verificare.</p></article></div></section>
         </div>
-
-        <aside class="context-column">
-          <section class="surface context-card"><p class="eyebrow">Contesto attuale</p><h2>N. 1234/20XX R.G.N.R.</h2><p>Tribunale di Roma</p><div class="context-event"><span>Udienza</span><strong>12 Maggio 2023</strong><small>Aula B — ore 10:30</small></div><a href="#timeline">Apri scheda completa →</a></section>
-          <section class="surface continuity-card"><p class="eyebrow">Continuità processuale</p><h3>Sviluppi successivi</h3><p class="hint">Cosa deriva da questo evento</p><ul><li><time>20/05/2023</time> Prossima udienza</li><li><time>24/05/2023</time> Deposito documenti</li></ul><h3>Documenti richiamati</h3><p class="hint">Citati o allegati</p><ul><li>Verbale udienza 05/05/2023</li><li>Ordinanza cautelare 15/05/2023</li><li>Intercettazioni ambientali 2022</li></ul></section>
-          <section class="surface ai-card"><p class="eyebrow">Assistente Hydra AI</p><div class="orb-mini"></div><p>Posso aiutarti ad analizzare il processo, trovare connessioni o rispondere a domande specifiche.</p><input type="text" placeholder="Fai una domanda…" /></section>
-        </aside>
+        <aside class="context-column"><section class="surface context-card"><p class="eyebrow">Contesto attuale</p><h2>N. 1234/20XX R.G.N.R.</h2><p>Tribunale di Roma</p><div class="context-event"><span>Udienza</span><strong>12 Maggio 2023</strong><small>Aula B — ore 10:30</small></div><a href="#timeline">Apri scheda completa →</a></section><section class="surface continuity-card"><p class="eyebrow">Continuità processuale</p><h3>Sviluppi successivi</h3><p class="hint">Cosa deriva da questo evento</p><ul><li><time>20/05/2023</time> Prossima udienza</li><li><time>24/05/2023</time> Deposito documenti</li></ul><h3>Documenti richiamati</h3><p class="hint">Citati o allegati</p><ul><li>Verbale udienza 05/05/2023</li><li>Ordinanza cautelare 15/05/2023</li><li>Intercettazioni ambientali 2022</li></ul></section><section class="surface ai-card"><p class="eyebrow">Assistente Hydra AI</p><div class="orb-mini"></div><p>Posso aiutarti ad analizzare il processo, trovare connessioni o rispondere a domande specifiche.</p><input type="text" placeholder="Fai una domanda…" /></section></aside>
       </section>
     </main>
     <footer class="footer"><p>Hydra Public · ricostruzione attribuita, non verbale ufficiale.</p></footer>
   </div>
-
-  <script src="app.js"></script>
-  <script src="network-enhancements.js"></script>
-  <script src="network-focus-bridge.js"></script>
+  <script src="app.js"></script><script src="network-enhancements.js"></script><script src="network-focus-bridge.js"></script>
 </body>
 </html>
