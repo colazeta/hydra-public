@@ -67,7 +67,15 @@
     const container = document.getElementById('network-graph');
     if (!container || !window.vis || localNetwork) return;
 
+    // The canonical app.js renderer may already own the graph. If so, do not create a second vis-network instance.
+    if (getNetworkInstance()) return;
+
+    // If a vis canvas already exists in the graph container, assume the canonical renderer is active.
+    if (container.querySelector('canvas')) return;
+
     loadNetworkData().then((data) => {
+      if (getNetworkInstance() || container.querySelector('canvas')) return;
+
       const nodeIds = new Set(data.nodes.map((node) => node.id));
       const validEdges = data.edges.filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target));
 
