@@ -8,24 +8,68 @@
   let replayTimer = null;
 
   const tone = ['red','violet','blue','green','orange'];
-  const safe = (value = '') => String(value).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const safe = (value = '') => String(value ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const hasText = (value) => String(value ?? '').trim().length > 0;
 
   async function loadJson(path, fallback) {
     try { const response = await fetch(path); if (!response.ok) return fallback; return await response.json(); } catch { return fallback; }
   }
 
   function dateLabel(rawDate) {
-    if (!rawDate) return 'data non disponibile';
+    if (!rawDate) return '';
     const d = new Date(`${rawDate}T00:00:00Z`);
     if (Number.isNaN(d.getTime())) return rawDate;
     return new Intl.DateTimeFormat('it', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d);
   }
 
   function buildData(timeline, issues, evidence, network) {
-    const themes = (issues.issues || []).slice(0, 6).map((item, index) => ({ id: `theme-${index}`, type: 'theme', label: item.public_label, summary: item.summary || item.current_status || '', status: item.verification_status || 'pending verification', tone: tone[index % tone.length], x: 9 + (index % 2) * 18, y: 16 + Math.floor(index / 2) * 24 }));
-    const events = (timeline.items || []).slice(0, 8).map((item, index) => ({ id: `event-${index}`, type: 'event', label: item.title || 'Evento', summary: item.summary || '', status: item.verification_status || 'pending verification', date: item.date, x: 39 + (index % 4) * 13, y: 15 + Math.floor(index / 4) * 32 }));
-    const documents = (evidence.items || []).slice(0, 5).map((item, index) => ({ id: `document-${index}`, type: 'document', label: item.title || 'Documento', summary: item.summary || 'Fonte/documento da leggere con caveat.', status: item.verification_status || 'pending verification', x: 52 + (index % 3) * 13, y: 63 + Math.floor(index / 3) * 18 }));
-    const actors = (network.nodes || []).slice(0, 6).map((item, index) => ({ id: `actor-${index}`, type: 'actor', label: item.public_label || item.id, summary: item.note || 'Nodo del network processuale/documentale.', status: item.quality_status || 'pending verification', x: 78 + (index % 2) * 10, y: 16 + Math.floor(index / 2) * 24 }));
+    const themes = (issues.issues || []).slice(0, 6).map((item, index) => ({
+      id: `theme-${index}`,
+      type: 'theme',
+      label: item.public_label,
+      summary: item.summary || item.current_status || '',
+      status: item.verification_status || '',
+      caveat: item.public_caveat || '',
+      tone: tone[index % tone.length],
+      x: 9 + (index % 2) * 18,
+      y: 16 + Math.floor(index / 2) * 24,
+    })).filter((item) => hasText(item.label));
+
+    const events = (timeline.items || []).slice(0, 8).map((item, index) => ({
+      id: `event-${index}`,
+      type: 'event',
+      label: item.title,
+      summary: item.summary || '',
+      status: item.verification_status || '',
+      caveat: item.public_caveat || '',
+      date: item.date,
+      sourceIds: item.source_ids || [],
+      x: 39 + (index % 4) * 13,
+      y: 15 + Math.floor(index / 4) * 32,
+    })).filter((item) => hasText(item.label));
+
+    const documents = (evidence.items || []).slice(0, 5).map((item, index) => ({
+      id: `document-${index}`,
+      type: 'document',
+      label: item.title,
+      summary: item.summary || '',
+      status: item.verification_status || '',
+      caveat: item.public_caveat || '',
+      url: item.url || '',
+      x: 52 + (index % 3) * 13,
+      y: 63 + Math.floor(index / 3) * 18,
+    })).filter((item) => hasText(item.label));
+
+    const actors = (network.nodes || []).slice(0, 6).map((item, index) => ({
+      id: `actor-${index}`,
+      type: 'actor',
+      label: item.public_label || item.id,
+      summary: item.note || '',
+      status: item.quality_status || '',
+      x: 78 + (index % 2) * 10,
+      y: 16 + Math.floor(index / 2) * 24,
+    })).filter((item) => hasText(item.label));
+
     canvasData = { themes, events, documents, actors };
   }
 
@@ -46,10 +90,14 @@
     const root = document.getElementById('process-canvas-map');
     if (!root) return;
     const visible = visibleItems();
+    if (!visible.length) {
+      root.innerHTML = '<p class="state-message">Nessun elemento pubblicabile disponibile per questo livello del canvas.</p>';
+      return;
+    }
     const lines = visible.map(lineFor).join('');
     const nodes = visible.map((item) => `
       <button class="${itemClass(item)}" type="button" data-canvas-id="${item.id}" style="--cx:${item.x}%;--cy:${item.y}%">
-        <span>${item.type}</span><strong>${safe(item.label)}</strong>${item.date ? `<small>${dateLabel(item.date)}</small>` : ''}
+        <span>${safe(item.type)}</span><strong>${safe(item.label)}</strong>${item.date ? `<small>${dateLabel(item.date)}</small>` : ''}
       </button>`).join('');
     root.innerHTML = `<div class="canvas-transform" style="${transformStyle()}"><svg class="canvas-lines" aria-hidden="true">${lines}</svg><div class="canvas-stage">${nodes}</div></div><div class="canvas-mini-map"><span></span><span></span><span></span></div><div class="canvas-controls"><button type="button" data-canvas-action="zoom-in">+</button><button type="button" data-canvas-action="zoom-out">−</button><button type="button" data-canvas-action="reset">Reset</button><button type="button" data-canvas-action="replay">Replay</button></div>`;
     root.querySelectorAll('.canvas-node').forEach((node) => node.addEventListener('click', () => focusItem(node.dataset.canvasId)));
@@ -67,7 +115,10 @@
     const panel = document.getElementById('canvas-focus-panel');
     if (!item || !panel) return;
     document.querySelectorAll('.canvas-node').forEach((node) => node.classList.toggle('is-current', node.dataset.canvasId === id));
-    panel.innerHTML = `<p class="eyebrow">${safe(item.type)}</p><h3>${safe(item.label)}</h3><p>${safe(item.summary)}</p><div class="continuity-mini"><article><strong>Cosa introduce</strong><span>${item.type === 'theme' ? 'Una traiettoria tematica da seguire nel tempo.' : 'Un punto osservabile nella ricostruzione pubblica.'}</span></article><article><strong>Cosa richiama</strong><span>Fonti, eventi o relazioni collegate da verificare nel dettaglio.</span></article><article><strong>Caveat</strong><span>La connessione è documentale/processuale, non una conclusione di responsabilità.</span></article></div><span class="badge status-${safe(item.status).toLowerCase().replace(/[^a-z0-9]+/g,'-')}">${safe(item.status)}</span>`;
+    const caveat = hasText(item.caveat) ? `<article><strong>Caveat</strong><span>${safe(item.caveat)}</span></article>` : '';
+    const status = hasText(item.status) ? `<span class="badge status-${safe(item.status).toLowerCase().replace(/[^a-z0-9]+/g,'-')}">${safe(item.status)}</span>` : '';
+    const url = hasText(item.url) ? `<p><a href="${safe(item.url)}" target="_blank" rel="noopener noreferrer">Apri fonte</a></p>` : '';
+    panel.innerHTML = `<p class="eyebrow">${safe(item.type)}</p><h3>${safe(item.label)}</h3>${hasText(item.summary) ? `<p>${safe(item.summary)}</p>` : '<p class="hint">Nessuna descrizione pubblicabile disponibile in Hydra Public.</p>'}<div class="continuity-mini">${caveat}</div>${url}${status}`;
   }
 
   function bindCanvasGestures(root) {
@@ -78,18 +129,9 @@
       root.setPointerCapture?.(event.pointerId);
       root.classList.add('is-panning');
     };
-    root.onpointermove = (event) => {
-      if (!isDragging) return;
-      offset = { x: event.clientX - dragStart.x, y: event.clientY - dragStart.y };
-      applyTransform();
-    };
+    root.onpointermove = (event) => { if (!isDragging) return; offset = { x: event.clientX - dragStart.x, y: event.clientY - dragStart.y }; applyTransform(); };
     root.onpointerup = () => { isDragging = false; root.classList.remove('is-panning'); };
-    root.onwheel = (event) => {
-      event.preventDefault();
-      const delta = event.deltaY > 0 ? -0.08 : 0.08;
-      scale = Math.min(1.8, Math.max(0.72, scale + delta));
-      applyTransform();
-    };
+    root.onwheel = (event) => { event.preventDefault(); const delta = event.deltaY > 0 ? -0.08 : 0.08; scale = Math.min(1.8, Math.max(0.72, scale + delta)); applyTransform(); };
   }
 
   function bindControls(root) {
@@ -110,11 +152,7 @@
     const items = visibleItems().filter((item) => item.type === 'event');
     if (!items.length) return;
     let index = 0;
-    replayTimer = setInterval(() => {
-      if (index >= items.length) { clearInterval(replayTimer); return; }
-      focusItem(items[index].id);
-      index += 1;
-    }, 950);
+    replayTimer = setInterval(() => { if (index >= items.length) { clearInterval(replayTimer); return; } focusItem(items[index].id); index += 1; }, 950);
   }
 
   function bindLayerButtons() {
