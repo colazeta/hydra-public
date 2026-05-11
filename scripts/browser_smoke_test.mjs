@@ -43,6 +43,39 @@ if (!/responsabilità penali|responsibility/i.test(caveatText)) {
   throw new Error('Network caveat is missing or too weak.');
 }
 
+await page.waitForFunction(() => Boolean(window.HYDRA_NETWORK_BRIDGE), null, { timeout: 10_000 });
+
+const bridgeApi = await page.evaluate(() => {
+  const bridge = window.HYDRA_NETWORK_BRIDGE;
+  return {
+    hasFit: typeof bridge?.fit === 'function',
+    hasStabilize: typeof bridge?.stabilize === 'function',
+    hasReset: typeof bridge?.reset === 'function',
+    hasFilter: typeof bridge?.filter === 'function',
+  };
+});
+
+if (!bridgeApi.hasFit || !bridgeApi.hasStabilize || !bridgeApi.hasReset || !bridgeApi.hasFilter) {
+  throw new Error(`Network bridge API incomplete: ${JSON.stringify(bridgeApi)}`);
+}
+
+const semanticFilterCount = await page.locator('#network .network-filters .filter-chip').count();
+if (semanticFilterCount < 2) {
+  throw new Error('Network semantic filters did not render.');
+}
+
+await page.locator('#network .network-filters .filter-chip[data-filter="type:person"]').click();
+await page.waitForTimeout(250);
+
+const personFilterActive = await page.locator('#network .network-filters .filter-chip[data-filter="type:person"]').evaluate((node) => node.classList.contains('active'));
+if (!personFilterActive) {
+  throw new Error('Person semantic filter did not become active.');
+}
+
+await page.evaluate(() => window.HYDRA_NETWORK_BRIDGE.filter('all'));
+await page.waitForTimeout(150);
+await page.evaluate(() => window.HYDRA_NETWORK_BRIDGE.reset());
+
 const expandButton = page.locator('#network-expand-toggle');
 await expandButton.waitFor({ timeout: 10_000 });
 await expandButton.click();
