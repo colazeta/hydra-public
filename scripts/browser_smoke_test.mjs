@@ -20,64 +20,46 @@ page.on('pageerror', (error) => {
 
 await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
 
-await page.waitForSelector('#process-canvas', { timeout: 10_000 });
-await page.waitForSelector('#process-canvas-map', { timeout: 10_000 });
-await page.waitForSelector('#canvas-focus-panel', { timeout: 10_000 });
+await page.waitForSelector('#timeline', { timeout: 10_000 });
+await page.waitForSelector('#themes-panel', { timeout: 10_000 });
+await page.waitForSelector('#issues', { timeout: 10_000 });
 await page.waitForSelector('#network', { timeout: 10_000 });
 await page.waitForSelector('#network-graph', { timeout: 10_000 });
 await page.waitForSelector('#network-detail-panel', { timeout: 10_000 });
+await page.waitForSelector('#evidence', { timeout: 10_000 });
+
+const obsoleteCanvas = await page.locator('#process-canvas, #process-canvas-map, #canvas-focus-panel').count();
+if (obsoleteCanvas > 0) {
+  throw new Error(`Obsolete process canvas UI is still rendered: ${obsoleteCanvas}`);
+}
 
 const title = await page.locator('h1').first().innerText();
 if (!title || title.length < 3) {
   throw new Error('Hero title did not render.');
 }
 
-const canvasNodeCount = await page.locator('#process-canvas-map .canvas-node').count();
-if (canvasNodeCount < 1) {
-  throw new Error('Process canvas did not render any public nodes.');
+const timelineCards = await page.locator('#timeline-list .timeline-item').count();
+if (timelineCards < 1) {
+  throw new Error('Timeline did not render any public event cards.');
 }
 
-await page.locator('#process-canvas-map .canvas-node').first().click();
-const focusText = await page.locator('#canvas-focus-panel').innerText();
-if (!focusText || /Seleziona un elemento/i.test(focusText)) {
-  throw new Error('Process canvas node click did not update the focus panel.');
+const themeCards = await page.locator('#themes-strip .theme-card, #issues-grid .card').count();
+if (themeCards < 1) {
+  throw new Error('Themes did not render any public cards.');
 }
 
-const transformBeforeZoom = await page.locator('#process-canvas-map .canvas-transform').getAttribute('style');
-await page.locator('#process-canvas-map [data-canvas-action="zoom-in"]').click();
-await page.waitForTimeout(100);
-const transformAfterZoom = await page.locator('#process-canvas-map .canvas-transform').getAttribute('style');
-if (transformBeforeZoom === transformAfterZoom) {
-  throw new Error('Process canvas zoom-in did not change transform style.');
-}
-
-await page.locator('#process-canvas-map [data-canvas-action="reset"]').click();
-await page.waitForTimeout(100);
-const transformAfterReset = await page.locator('#process-canvas-map .canvas-transform').getAttribute('style');
-if (!/scale\(1\)/.test(transformAfterReset || '') || !/translate\(0px, 0px\)/.test(transformAfterReset || '')) {
-  throw new Error(`Process canvas reset did not restore transform: ${transformAfterReset}`);
-}
-
-const themeLayerButton = page.locator('[data-canvas-layer="theme"]');
-await themeLayerButton.click();
+await page.locator('#issues-grid .card').first().click();
 await page.waitForTimeout(150);
-const themeLayerActive = await themeLayerButton.evaluate((node) => node.classList.contains('active'));
-if (!themeLayerActive) {
-  throw new Error('Process canvas theme layer did not become active.');
+const highlightedAfterThemeClick = await page.locator('#timeline-list .timeline-item.is-match, #timeline-list .timeline-item.is-dimmed').count();
+if (highlightedAfterThemeClick < 1) {
+  throw new Error('Theme click did not trigger timeline highlighting/dimming.');
 }
 
-const themeLayerNonThemeNodes = await page.locator('#process-canvas-map .canvas-node:not(.canvas-theme)').count();
-if (themeLayerNonThemeNodes > 0) {
-  throw new Error(`Theme layer rendered non-theme nodes: ${themeLayerNonThemeNodes}`);
-}
-
-await page.locator('[data-canvas-layer="all"]').click();
-await page.waitForTimeout(150);
-await page.locator('#process-canvas-map [data-canvas-action="replay"]').click();
+await page.locator('#replay-process').click();
 await page.waitForTimeout(1_100);
-const replayActivated = await page.locator('#process-canvas-map .canvas-node.is-current').count();
+const replayActivated = await page.locator('#timeline-list .timeline-item.is-current, .river-node.is-current').count();
 if (replayActivated < 1) {
-  throw new Error('Process canvas replay did not activate any event node.');
+  throw new Error('Timeline replay did not activate any event.');
 }
 
 const networkCanvasCount = await page.locator('#network-graph canvas').count();
