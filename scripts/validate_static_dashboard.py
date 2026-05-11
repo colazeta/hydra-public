@@ -23,6 +23,7 @@ REQUIRED_FILES = [
     "app.js",
     "styles.css",
     "network-enhancements.js",
+    "network-focus-bridge.js",
     "data/exports/public/public_timeline.json",
     "data/exports/public/public_hearings.json",
     "data/exports/public/public_issues.json",
@@ -34,6 +35,7 @@ REQUIRED_INDEX_SNIPPETS = [
     "styles.css",
     "app.js",
     "network-enhancements.js",
+    "network-focus-bridge.js",
     "vis-network/standalone/umd/vis-network.min.js",
     "id=\"network\"",
     "id=\"network-graph\"",
@@ -52,6 +54,14 @@ REQUIRED_ENHANCEMENT_SNIPPETS = [
     "network-center-view",
     "network-stabilize-view",
     "network-collapse-focus",
+]
+
+REQUIRED_BRIDGE_SNIPPETS = [
+    "HYDRA_NETWORK_INSTANCE",
+    "focusNode",
+    "focusEdge",
+    "HYDRA_NETWORK_BRIDGE",
+    "public_network.json",
 ]
 
 REQUIRED_CSS_SNIPPETS = [
@@ -176,11 +186,13 @@ def main() -> int:
     index = read_text("index.html", errors)
     app = read_text("app.js", errors)
     enhancements = read_text("network-enhancements.js", errors)
+    bridge = read_text("network-focus-bridge.js", errors)
     css = read_text("styles.css", errors)
 
     check_snippets("index.html", index, REQUIRED_INDEX_SNIPPETS, errors)
     check_snippets("app.js", app, REQUIRED_APP_SNIPPETS, errors)
     check_snippets("network-enhancements.js", enhancements, REQUIRED_ENHANCEMENT_SNIPPETS, errors)
+    check_snippets("network-focus-bridge.js", bridge, REQUIRED_BRIDGE_SNIPPETS, errors)
     check_snippets("styles.css", css, REQUIRED_CSS_SNIPPETS, errors)
 
     validate_public_exports(errors)
