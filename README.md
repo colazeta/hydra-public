@@ -81,6 +81,22 @@ Protocollo:
 docs/browser_qa_protocol.md
 ```
 
+Template report:
+
+```text
+docs/browser_qa_report_template.md
+```
+
+Flusso consigliato:
+
+```text
+1. eseguire python scripts/validate_static_dashboard.py
+2. aprire la dashboard pubblica in browser
+3. seguire docs/browser_qa_protocol.md
+4. compilare docs/browser_qa_report_template.md
+5. riportare eventuali fix in issue dedicate
+```
+
 Il QA deve verificare:
 
 - caricamento della pagina;
