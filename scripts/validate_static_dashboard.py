@@ -2,12 +2,7 @@
 """Validate the canonical Hydra Public static dashboard.
 
 This script performs repository-side checks that can be run before browser QA.
-It does not replace browser-side validation, but catches common regressions:
-- missing canonical files;
-- invalid public JSON exports;
-- network edges pointing to missing nodes;
-- missing script/style references in index.html;
-- missing expanded-network CSS hooks.
+It catches common regressions in the static dashboard, process canvas and network map.
 """
 
 from __future__ import annotations
@@ -22,6 +17,7 @@ REQUIRED_FILES = [
     "index.html",
     "app.js",
     "styles.css",
+    "process-canvas.js",
     "network-enhancements.js",
     "network-focus-bridge.js",
     "data/exports/public/public_timeline.json",
@@ -29,14 +25,24 @@ REQUIRED_FILES = [
     "data/exports/public/public_issues.json",
     "data/exports/public/public_sources.json",
     "data/exports/public/public_network.json",
+    "data/exports/public/public_evidence.json",
 ]
 
 REQUIRED_INDEX_SNIPPETS = [
     "styles.css",
     "app.js",
+    "process-canvas.js",
     "network-enhancements.js",
     "network-focus-bridge.js",
     "vis-network/standalone/umd/vis-network.min.js",
+    "id=\"process-canvas\"",
+    "id=\"process-canvas-map\"",
+    "id=\"canvas-focus-panel\"",
+    "data-canvas-layer=\"all\"",
+    "data-canvas-layer=\"theme\"",
+    "data-canvas-layer=\"event\"",
+    "data-canvas-layer=\"document\"",
+    "data-canvas-layer=\"actor\"",
     "id=\"network\"",
     "id=\"network-graph\"",
     "id=\"network-detail-panel\"",
@@ -46,6 +52,24 @@ REQUIRED_APP_SNIPPETS = [
     "public_network.json",
     "renderInteractiveNetwork",
     "renderNetwork",
+    "container.innerHTML=''",
+    "const brokenEdges=rawEdges.length-edges.length",
+    "HYDRA_NETWORK_INSTANCE.destroy",
+    "HYDRA_NETWORK_BRIDGE?.filter",
+]
+
+REQUIRED_CANVAS_SNIPPETS = [
+    "public_timeline.json",
+    "public_issues.json",
+    "public_evidence.json",
+    "public_network.json",
+    "process-canvas-map",
+    "canvas-focus-panel",
+    "data-canvas-action=\"zoom-in\"",
+    "data-canvas-action=\"zoom-out\"",
+    "data-canvas-action=\"reset\"",
+    "data-canvas-action=\"replay\"",
+    "Nessuna descrizione pubblicabile disponibile in Hydra Public",
 ]
 
 REQUIRED_ENHANCEMENT_SNIPPETS = [
@@ -70,6 +94,11 @@ REQUIRED_CSS_SNIPPETS = [
     ".network-shell",
     ".network-detail-panel",
     ".network-toolbar",
+    ".process-canvas-map",
+    ".canvas-transform",
+    ".canvas-controls",
+    ".canvas-node",
+    ".canvas-focus-panel",
 ]
 
 
@@ -137,6 +166,7 @@ def validate_network(errors: list[str]) -> None:
                 fail(f"Network node {node_id} missing {key}", errors)
 
     edge_ids = set()
+    broken_edges = 0
     for edge in edges:
         edge_id = edge.get("id")
         if not edge_id:
@@ -148,13 +178,15 @@ def validate_network(errors: list[str]) -> None:
 
         source = edge.get("source")
         target = edge.get("target")
-        if source not in node_ids:
-            fail(f"Network edge {edge_id} has missing source node: {source}", errors)
-        if target not in node_ids:
-            fail(f"Network edge {edge_id} has missing target node: {target}", errors)
+        if source not in node_ids or target not in node_ids:
+            broken_edges += 1
         for key in ["public_label", "quality_status"]:
             if not edge.get(key):
                 fail(f"Network edge {edge_id} missing {key}", errors)
+
+    # Broken public edges are allowed because the frontend now filters them and reports the exclusion.
+    if broken_edges:
+        print(f"WARNING: {broken_edges} network edge(s) point to missing nodes and will be filtered in the frontend.")
 
 
 def validate_public_exports(errors: list[str]) -> None:
@@ -163,6 +195,7 @@ def validate_public_exports(errors: list[str]) -> None:
         "data/exports/public/public_hearings.json": "hearings",
         "data/exports/public/public_issues.json": "issues",
         "data/exports/public/public_sources.json": "sources",
+        "data/exports/public/public_evidence.json": "items",
     }
 
     for path, required_key in exports.items():
@@ -185,12 +218,14 @@ def main() -> int:
 
     index = read_text("index.html", errors)
     app = read_text("app.js", errors)
+    canvas = read_text("process-canvas.js", errors)
     enhancements = read_text("network-enhancements.js", errors)
     bridge = read_text("network-focus-bridge.js", errors)
     css = read_text("styles.css", errors)
 
     check_snippets("index.html", index, REQUIRED_INDEX_SNIPPETS, errors)
     check_snippets("app.js", app, REQUIRED_APP_SNIPPETS, errors)
+    check_snippets("process-canvas.js", canvas, REQUIRED_CANVAS_SNIPPETS, errors)
     check_snippets("network-enhancements.js", enhancements, REQUIRED_ENHANCEMENT_SNIPPETS, errors)
     check_snippets("network-focus-bridge.js", bridge, REQUIRED_BRIDGE_SNIPPETS, errors)
     check_snippets("styles.css", css, REQUIRED_CSS_SNIPPETS, errors)
