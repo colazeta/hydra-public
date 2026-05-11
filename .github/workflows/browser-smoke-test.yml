@@ -1,0 +1,33 @@
+name: Browser smoke test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  browser-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --save-dev @playwright/test
+          npx playwright install --with-deps chromium
+
+      - name: Serve static dashboard
+        run: |
+          npx http-server . -p 4173 > /tmp/hydra-public-server.log 2>&1 &
+          sleep 3
+
+      - name: Run browser smoke test
+        run: node scripts/browser_smoke_test.mjs
