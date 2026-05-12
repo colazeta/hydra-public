@@ -11,10 +11,11 @@
     const toolbar = document.createElement('div');
     toolbar.className = 'network-toolbar';
     toolbar.innerHTML = `
-      <button id="network-expand-toggle" class="filter-chip" type="button">Espandi rete</button>
+      <button id="network-expand-toggle" class="filter-chip primary" type="button">Apri a schermo intero</button>
       <button id="network-center-view" class="filter-chip" type="button">Centra vista</button>
-      <button id="network-stabilize-view" class="filter-chip" type="button">Stabilizza</button>
+      <button id="network-stabilize-view" class="filter-chip" type="button">Ricalcola layout</button>
       <button id="network-collapse-focus" class="filter-chip" type="button">Reset focus</button>
+      <span class="network-toolbar-hint">Clic su un nodo: isola il suo intorno documentale. Esc: chiudi fullscreen.</span>
     `;
 
     shell.parentElement.insertBefore(toolbar, shell);
@@ -28,8 +29,8 @@
   function toggleExpandedMode() {
     const expanded = document.body.classList.toggle('network-expanded');
     const button = document.getElementById('network-expand-toggle');
-    if (button) button.textContent = expanded ? 'Riduci rete' : 'Espandi rete';
-    window.setTimeout(() => getBridge()?.fit?.(), 220);
+    if (button) button.textContent = expanded ? 'Chiudi schermo intero' : 'Apri a schermo intero';
+    window.setTimeout(() => getBridge()?.fit?.(), 260);
   }
 
   document.addEventListener('keydown', (event) => {
