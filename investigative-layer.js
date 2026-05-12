@@ -47,7 +47,54 @@
       quality: edge.quality_status || 'non indicato',
     }));
 
-    return { nodes, edges, centralNodes, relationshipRows, typeCounts, edgeQuality };
+    return { nodes, edges, nodesById, centralNodes, relationshipRows, typeCounts, edgeQuality };
+  }
+
+  function renderNodeDossier(nodeId, radar) {
+    const node = radar.nodesById.get(nodeId);
+    if (!node) return;
+
+    const panel = document.getElementById('network-detail-panel');
+    const relatedEdges = radar.edges.filter((edge) => edge.source === nodeId || edge.target === nodeId);
+    const relatedNodes = [...new Set(relatedEdges.flatMap((edge) => [edge.source, edge.target]).filter((id) => id !== nodeId))]
+      .map((id) => radar.nodesById.get(id))
+      .filter(Boolean);
+
+    document.querySelectorAll('.centrality-row').forEach((row) => {
+      row.classList.toggle('is-selected', row.dataset.radarNode === nodeId);
+    });
+
+    document.querySelectorAll('.network-card').forEach((card) => {
+      const text = (card.textContent || '').toLowerCase();
+      const nodeText = (node.public_label || node.id || '').toLowerCase();
+      const relatedMatch = relatedNodes.some((related) => text.includes(String(related.public_label || related.id || '').toLowerCase()));
+      card.classList.toggle('search-match', text.includes(nodeText) || relatedMatch);
+    });
+
+    if (panel) {
+      panel.innerHTML = `
+        <p class="eyebrow">Dossier nodo</p>
+        <h3>${esc(node.public_label || node.id)}</h3>
+        <p>${esc(node.note || 'Nodo presente nell’export pubblico della rete.')}</p>
+        <div class="dossier-stat-row">
+          <span><strong>${relatedEdges.length}</strong><small>relazioni</small></span>
+          <span><strong>${relatedNodes.length}</strong><small>nodi collegati</small></span>
+          <span><strong>${esc(qualityLabel(node.quality_status))}</strong><small>qualità</small></span>
+        </div>
+        <section class="dossier-block">
+          <h4>Connessioni dirette</h4>
+          ${relatedEdges.length ? `<ul>${relatedEdges.map((edge) => {
+            const otherId = edge.source === nodeId ? edge.target : edge.source;
+            return `<li><strong>${esc(nodeLabel(radar.nodesById, otherId))}</strong><br><span>${esc(edge.public_label || 'Relazione documentale')}</span><small>${esc(qualityLabel(edge.quality_status))}</small></li>`;
+          }).join('')}</ul>` : '<p>Nessuna relazione diretta disponibile nell’export pubblico.</p>'}
+        </section>
+        <p class="network-guard"><strong>Caveat.</strong> Il dossier descrive connessioni documentali o processuali, non responsabilità penali.</p>
+      `;
+    }
+
+    document.getElementById('network')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.HYDRA_NETWORK_BRIDGE?.reset?.();
+    window.setTimeout(() => window.HYDRA_NETWORK_BRIDGE?.fit?.(), 250);
   }
 
   function renderRadar(network) {
@@ -74,7 +121,7 @@
         <p class="eyebrow">Nodi più connessi</p>
         <div class="centrality-list">
           ${radar.centralNodes.map((node) => `
-            <button class="centrality-row" data-radar-node="${esc(node.id)}" type="button">
+            <button class="centrality-row" data-radar-node="${esc(node.id)}" type="button" title="Apri dossier del nodo">
               <span><strong>${esc(node.label)}</strong><small>${esc(node.type)}</small></span>
               <i style="--w:${Math.max(12, Math.round((node.count / maxDegree) * 100))}%"></i>
               <b>${node.count}</b>
@@ -97,6 +144,9 @@
     `;
 
     shell.parentElement.insertBefore(panel, shell);
+    panel.querySelectorAll('.centrality-row').forEach((button) => {
+      button.addEventListener('click', () => renderNodeDossier(button.dataset.radarNode, radar));
+    });
   }
 
   function installPublicSearch() {
@@ -131,7 +181,6 @@
       const network = await loadJson('data/exports/public/public_network.json');
       renderRadar(network);
     } catch (error) {
-      // The main app already handles public-data loading errors. This layer remains non-blocking.
       console.warn('[Hydra investigative layer]', error);
     }
   }
