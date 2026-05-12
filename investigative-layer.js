@@ -93,8 +93,13 @@
     }
 
     document.getElementById('network')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.HYDRA_NETWORK_BRIDGE?.reset?.();
-    window.setTimeout(() => window.HYDRA_NETWORK_BRIDGE?.fit?.(), 250);
+    window.setTimeout(() => {
+      const focused = window.HYDRA_NETWORK_BRIDGE?.focusNode?.(nodeId);
+      if (!focused) {
+        window.HYDRA_NETWORK_BRIDGE?.reset?.();
+        window.setTimeout(() => window.HYDRA_NETWORK_BRIDGE?.fit?.(), 250);
+      }
+    }, 250);
   }
 
   function renderRadar(network) {
@@ -121,7 +126,7 @@
         <p class="eyebrow">Nodi più connessi</p>
         <div class="centrality-list">
           ${radar.centralNodes.map((node) => `
-            <button class="centrality-row" data-radar-node="${esc(node.id)}" type="button" title="Apri dossier del nodo">
+            <button class="centrality-row" data-radar-node="${esc(node.id)}" type="button" title="Apri dossier e focalizza il grafo">
               <span><strong>${esc(node.label)}</strong><small>${esc(node.type)}</small></span>
               <i style="--w:${Math.max(12, Math.round((node.count / maxDegree) * 100))}%"></i>
               <b>${node.count}</b>
