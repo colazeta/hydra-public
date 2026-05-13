@@ -1,0 +1,80 @@
+name: Agentic autonomous pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ux_ci_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Static dashboard contract validation
+        run: python scripts/validate_static_dashboard.py
+
+      - name: QA suite for UX and data contracts
+        run: |
+          npm run check:release-qa
+          npm run check:multilayer-qa
+          npm run check:redesign-qa
+          npm run check:prototype-autonomy-qa
+
+      - name: Install browser smoke dependencies
+        run: |
+          npm install --no-save @playwright/test http-server
+          npx playwright install --with-deps chromium
+
+      - name: Run browser smoke test
+        run: |
+          npx http-server . -p 4173 > /tmp/hydra-public-server.log 2>&1 &
+          sleep 3
+          node scripts/browser_smoke_test.mjs
+
+      - name: Upload browser logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke-server-log
+          path: /tmp/hydra-public-server.log
+
+  deployment_readiness:
+    if: github.event_name != 'pull_request'
+    needs: ux_ci_audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Verify release/deployment readiness
+        run: |
+          npm run check:build-readiness
+          npm run check:routes
+          npm run check:paths
