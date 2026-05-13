@@ -1,7 +1,9 @@
 name: Deploy Hydra Public
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Agentic autonomous pipeline"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -16,6 +18,7 @@ concurrency:
 
 jobs:
   validate:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
