@@ -147,6 +147,25 @@ Il QA deve verificare:
 - layout mobile;
 - caveat e badge qualità.
 
+
+## Pipeline agentica autonoma (UX, CI, deployment)
+
+La pipeline unificata per audit UX, controlli CI e readiness di deployment è:
+
+```text
+.github/workflows/agentic-autonomous-pipeline.yml
+```
+
+La pipeline esegue in sequenza:
+
+1. validazione contratti statici (`python scripts/validate_static_dashboard.py`);
+2. QA automatizzato di layer UX/dati (`check:release-qa`, `check:multilayer-qa`, `check:redesign-qa`, `check:prototype-autonomy-qa`);
+3. smoke test browser Playwright con server statico locale;
+4. gate di deployment readiness su push/manual (`check:build-readiness`, `check:routes`, `check:paths`).
+
+In caso di failure nello smoke test browser, la pipeline allega il log server come artifact per diagnosi rapida.
+Il deploy GitHub Pages è agganciato al completamento con esito positivo di questa pipeline (oppure avviabile manualmente via `workflow_dispatch`).
+
 ## Regole anti-caos
 
 - Non migrare a React/Vite senza issue esplicita.

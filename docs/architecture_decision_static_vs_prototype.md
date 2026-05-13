@@ -15,4 +15,4 @@ Accepted (current repository baseline)
 ## Guardrails
 - `npm run check:frontend-structure` must pass.
 - `npm run check:release-qa` must pass.
-- Future routing unification work (#11/#13) should happen in a dedicated migration PR.
+- Route boundaries are enforced by QA (`check:frontend-structure`) and canonical route metadata (`config/routes.json`).
