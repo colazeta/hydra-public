@@ -18,19 +18,19 @@
     - `check:exports` and stricter network shape validation.
     - consolidated release QA script.
 
-## Remaining (outside current static-scope closure)
+## Closure candidates (validated in current static scope)
 
 - #13 Stabilizzare struttura frontend (dup static/prototype React)
-  - ✅ Implemented partial: ADR + structure QA guard + canonical route metadata; full unification still pending in dedicated migration PR.
+  - ✅ Closed in current scope: ADR + stricter structure QA guard + canonical route lock in `config/routes.json`.
 
 - #12 Explorer investigativo multi-layer
-  - ✅ Implemented partial: superficie multi-layer attiva (timeline, hearings, issues, network, evidence) con QA dedicata; restano iterazioni di redesign.
+  - ✅ Closed in current scope: layer timeline/hearings/issues/network/evidence attivi con QA dedicata e validazione sezioni statiche canoniche.
 
 - #11 Collegare HydraExplorerPrototype al routing reale e verificare build
-  - ✅ Implemented partial: route canonicale + `check:prototype-route` attivo; build classificata `READY_STATIC` con bundler demandato a fase CI/toolchain.
+  - ✅ Closed in current scope: route prototype canonicale verificata da `check:prototype-route` (contenuto stub, backlink statico, anti-coupling React entry).
 
 - #10 Implementare explorer network+timeline da dataset pubblici JSON
-  - ✅ Implemented partial: network+timeline layer attivo con filtri semantici, rendering evidenze e QA `check:multilayer-qa`.
+  - ✅ Closed in current scope: network+timeline+hearings+sources/evidence verificati da `check:multilayer-qa` con controlli su sezioni, renderer e dataset pubblici.
 
 - #9 Explorer pubblico Hydra: prototipo autonomo
   - ✅ Implemented partial: route prototype dedicata con QA di autonomia (`check:prototype-autonomy-qa`) e guardrail di separazione runtime.

@@ -40,6 +40,9 @@ REQUIRED_INDEX_SNIPPETS = [
     "id=\"network-graph\"",
     "id=\"network-detail-panel\"",
     "id=\"evidence\"",
+    "id=\"hearings\"",
+    "id=\"sources\"",
+    "id=\"methodology\"",
 ]
 
 FORBIDDEN_INDEX_SNIPPETS = [

@@ -22,6 +22,32 @@ if (/src\/main\.tsx/.test(indexHtml) || /type=\"module\"\s+src=\"\/src\//.test(i
 }
 
 
+
+const routesRaw = fs.readFileSync('config/routes.json', 'utf8');
+let routesConfig;
+try {
+  routesConfig = JSON.parse(routesRaw);
+} catch (_error) {
+  console.error('INVALID_ROUTES_JSON config/routes.json');
+  process.exit(1);
+}
+
+const expectedRoutes = [
+  { name: 'static_dashboard', path: '/index.html', entry: 'index.html' },
+  { name: 'prototype_stub', path: '/prototype/index.html', entry: 'prototype/index.html' },
+];
+
+if (!Array.isArray(routesConfig.routes)) {
+  console.error('ROUTES_ARRAY_MISSING config/routes.json');
+  failed = true;
+} else {
+  const normalized = routesConfig.routes.map((r) => ({ name: r?.name, path: r?.path, entry: r?.entry }));
+  if (JSON.stringify(normalized) !== JSON.stringify(expectedRoutes)) {
+    console.error('ROUTES_CONFIG_DRIFT');
+    failed = true;
+  }
+}
+
 if (!fs.existsSync('docs/architecture_decision_static_vs_prototype.md')) {
   console.error('MISSING_ADR_STATIC_VS_PROTOTYPE');
   failed = true;

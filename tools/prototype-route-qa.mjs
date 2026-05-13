@@ -12,4 +12,14 @@ if (!html.includes('Hydra Explorer Prototype')) {
   process.exit(1);
 }
 
+if (!html.includes('href="../index.html"')) {
+  console.error('PROTOTYPE_ROUTE_MISSING_STATIC_BACKLINK');
+  process.exit(1);
+}
+
+if (/src\/main\.tsx/.test(html) || /type="module"\s+src="\/src\//.test(html)) {
+  console.error('PROTOTYPE_ROUTE_COUPLED_TO_REACT_ENTRY');
+  process.exit(1);
+}
+
 console.log('PROTOTYPE_ROUTE_QA_OK');
